@@ -28,6 +28,7 @@ namespace L13_Craftris {
     // enable unlimited mouse-movement (user needs to click on canvas first)
     canvas.addEventListener("mousedown", canvas.requestPointerLock);
     canvas.addEventListener("mouseup", () => document.exitPointerLock());
+    canvas.addEventListener("click", handleClick);
 
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));
@@ -128,6 +129,9 @@ namespace L13_Craftris {
   }
 
   //#region Interaction
+  function handleClick(_event: MouseEvent): void {
+    ƒ.Debug.log("Click");
+  }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
     if (!document.pointerLockElement)

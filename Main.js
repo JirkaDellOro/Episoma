@@ -25,6 +25,7 @@ var L13_Craftris;
         // enable unlimited mouse-movement (user needs to click on canvas first)
         canvas.addEventListener("mousedown", canvas.requestPointerLock);
         canvas.addEventListener("mouseup", () => document.exitPointerLock());
+        canvas.addEventListener("click", handleClick);
         // set lights
         let cmpLight = new L13_Craftris.ƒ.ComponentLight(new L13_Craftris.ƒ.LightDirectional(L13_Craftris.ƒ.Color.CSS("WHITE")));
         cmpLight.pivot.lookAt(new L13_Craftris.ƒ.Vector3(0.5, 1, 0.8));
@@ -112,6 +113,9 @@ var L13_Craftris;
     }
     L13_Craftris.updateDisplay = updateDisplay;
     //#region Interaction
+    function handleClick(_event) {
+        L13_Craftris.ƒ.Debug.log("Click");
+    }
     function hndPointerMove(_event) {
         if (!document.pointerLockElement)
             return;
