@@ -26,7 +26,8 @@ namespace L13_Craftris {
     ƒ.Debug.log("Canvas", canvas);
 
     // enable unlimited mouse-movement (user needs to click on canvas first)
-    canvas.addEventListener("click", canvas.requestPointerLock);
+    canvas.addEventListener("mousedown", canvas.requestPointerLock);
+    canvas.addEventListener("mouseup", () => document.exitPointerLock());
 
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));
@@ -129,6 +130,8 @@ namespace L13_Craftris {
   //#region Interaction
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
+    if (!document.pointerLockElement)
+      return;
     // let segmentBefore: number = camera.getSegmentY();
     camera.rotateY(_event.movementX * speedCameraRotation);
     camera.rotateX(_event.movementY * speedCameraRotation);
