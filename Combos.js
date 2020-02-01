@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     class Combos {
         constructor(_elements) {
             this.found = [];
@@ -37,11 +37,11 @@ var L13_Craftris;
                 this.recurse(match, _combo);
         }
         findNeigborsOfSameColor(_element) {
-            let allNeighbors = L13_Craftris.grid.findNeighbors(_element.position);
+            let allNeighbors = Episoma.grid.findNeighbors(_element.position);
             let found = allNeighbors.filter(_neighbor => (_neighbor.cube.name == _element.cube.name));
             return found;
         }
     }
-    L13_Craftris.Combos = Combos;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Combos = Combos;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Combos.js.map

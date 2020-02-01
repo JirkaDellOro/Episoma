@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
   export import ƒ = FudgeCore;
 
   enum GAME_STATE {
@@ -139,6 +139,7 @@ namespace L13_Craftris {
     for (let control of controls)
       if (control.pickFragment(viewport, mouse))
         controlActive = control;
+    controlActive.rotateToSegment(camera.getSegmentY());
   }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
@@ -204,64 +205,64 @@ namespace L13_Craftris {
   }
 
   async function dropFragment(): Promise<void> {
-    if (!controlActive.isConnected()) {
-      callToAction("CONNECT TO EXISTING CUBES!");
-      return;
-    }
-    points.clearCalc();
+    // if (!controlActive.isConnected()) {
+    //   callToAction("CONNECT TO EXISTING CUBES!");
+    //   return;
+    // }
+    // points.clearCalc();
 
-    let dropped: GridElement[] = controlActive.dropFragment();
-    let combos: Combos = new Combos(dropped);
+    // let dropped: GridElement[] = controlActive.dropFragment();
+    // let combos: Combos = new Combos(dropped);
 
-    callToAction("CREATE COMBOS OF 3 OR MORE!");
-    let iCombo: number = await handleCombos(combos, 0);
-    if (iCombo > 0) {
-      compressAndHandleCombos(iCombo);
-      if (ƒ.random.getBoolean())
-        callToAction("MULTIPLE COMBOS SCORE HIGHER!");
-      else
-        callToAction("LARGER COMBOS SCORE HIGHER!");
-    }
-    startRandomFragment();
+    // callToAction("CREATE COMBOS OF 3 OR MORE!");
+    // let iCombo: number = await handleCombos(combos, 0);
+    // if (iCombo > 0) {
+    //   compressAndHandleCombos(iCombo);
+    //   if (ƒ.random.getBoolean())
+    //     callToAction("MULTIPLE COMBOS SCORE HIGHER!");
+    //   else
+    //     callToAction("LARGER COMBOS SCORE HIGHER!");
+    // }
+    // startRandomFragment();
     updateDisplay();
   }
   //#endregion
 
   //#region Combos & Compression
-  export async function compressAndHandleCombos(_iCombo: number): Promise<void> {
-    let moves: Move[];
-    let iCombo: number = _iCombo;
-    do {
-      moves = compress();
-      await ƒ.Time.game.delay(400);
+  // export async function compressAndHandleCombos(_iCombo: number): Promise<void> {
+  //   let moves: Move[];
+  //   let iCombo: number = _iCombo;
+  //   do {
+  //     moves = compress();
+  //     await ƒ.Time.game.delay(400);
 
-      let moved: GridElement[] = moves.map(_move => _move.element);
-      let combos: Combos = new Combos(moved);
-      let iCounted: number = await handleCombos(combos, iCombo);
-      iCombo += iCounted;
-    } while (moves.length > 0);
-  }
+  //     let moved: GridElement[] = moves.map(_move => _move.element);
+  //     let combos: Combos = new Combos(moved);
+  //     let iCounted: number = await handleCombos(combos, iCombo);
+  //     iCombo += iCounted;
+  //   } while (moves.length > 0);
+  // }
 
-  export async function handleCombos(_combos: Combos, _iCombo: number): Promise<number> {
-    let iCombo: number = 0;
-    for (let combo of _combos.found)
-      if (combo.length > 2) {
-        iCombo++;
-        points.showCombo(combo, _iCombo + iCombo);
-        for (let shrink: number = Math.PI - Math.asin(0.9); shrink >= 0; shrink -= 0.2) {
-          for (let element of combo) {
-            let mtxLocal: ƒ.Matrix4x4 = element.cube.cmpTransform.local;
-            mtxLocal.scaling = ƒ.Vector3.ONE(Math.sin(shrink) * 1.2);
-          }
-          updateDisplay();
-          await ƒ.Time.game.delay(20);
-        }
-        for (let element of combo)
-          grid.pop(element.position);
-      }
-    updateDisplay();
-    return iCombo;
-  }
+  // export async function handleCombos(_combos: Combos, _iCombo: number): Promise<number> {
+  //   let iCombo: number = 0;
+  //   for (let combo of _combos.found)
+  //     if (combo.length > 2) {
+  //       iCombo++;
+  //       points.showCombo(combo, _iCombo + iCombo);
+  //       for (let shrink: number = Math.PI - Math.asin(0.9); shrink >= 0; shrink -= 0.2) {
+  //         for (let element of combo) {
+  //           let mtxLocal: ƒ.Matrix4x4 = element.cube.cmpTransform.local;
+  //           mtxLocal.scaling = ƒ.Vector3.ONE(Math.sin(shrink) * 1.2);
+  //         }
+  //         updateDisplay();
+  //         await ƒ.Time.game.delay(20);
+  //       }
+  //       for (let element of combo)
+  //         grid.pop(element.position);
+  //     }
+  //   updateDisplay();
+  //   return iCombo;
+  // }
 
   function move(_transformation: Transformation): void {
     let animationSteps: number = 5;
@@ -284,29 +285,29 @@ namespace L13_Craftris {
     });
   }
 
-  export function compress(): Move[] {
-    let moves: Move[] = grid.compress();
+  // export function compress(): Move[] {
+  //   let moves: Move[] = grid.compress();
 
-    for (let move of moves) {
-      grid.pop(move.element.position);
-      grid.push(move.target, move.element);
-    }
+  //   for (let move of moves) {
+  //     grid.pop(move.element.position);
+  //     grid.push(move.target, move.element);
+  //   }
 
-    let animationSteps: number = 5;
-    ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
-      for (let move of moves) {
-        let translation: ƒ.Vector3 = ƒ.Vector3.DIFFERENCE(move.target, move.element.position);
-        translation.normalize(1 / animationSteps);
-        move.element.position = ƒ.Vector3.SUM(move.element.position, translation);
-        if (_event.lastCall)
-          move.element.position = move.target;
+  //   let animationSteps: number = 5;
+  //   ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
+  //     for (let move of moves) {
+  //       let translation: ƒ.Vector3 = ƒ.Vector3.DIFFERENCE(move.target, move.element.position);
+  //       translation.normalize(1 / animationSteps);
+  //       move.element.position = ƒ.Vector3.SUM(move.element.position, translation);
+  //       if (_event.lastCall)
+  //         move.element.position = move.target;
 
-      }
-      updateDisplay();
-    });
+  //     }
+  //     updateDisplay();
+  //   });
 
-    return moves;
-  }
+  //   return moves;
+  // }
   //#endregion
 
   function callToAction(_message: string): void {

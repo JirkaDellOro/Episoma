@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
   type Setup = { type: CUBE_TYPE, positions: number[][] };
 
   export function startTests(): void {
@@ -68,7 +68,7 @@ namespace L13_Craftris {
 
     // ƒ.Time.game.setScale(0.2);
     await ƒ.Time.game.delay(2000);
-    compressAndHandleCombos(0);
+    // compressAndHandleCombos(0);
   }
 
   function testCombos(): void {
@@ -81,12 +81,12 @@ namespace L13_Craftris {
 
     setupGrid(setups);
 
-    let startElements: GridElement[] = setups.map((_setup: Setup): GridElement => {
-      return grid.pull(new ƒ.Vector3(..._setup.positions[1]));
-    });
+    // let startElements: GridElement[] = setups.map((_setup: Setup): GridElement => {
+    //   return grid.pull(new ƒ.Vector3(..._setup.positions[1]));
+    // });
 
-    let combos: Combos = new Combos(startElements);
-    handleCombos(combos, 1);
+    // let combos: Combos = new Combos(startElements);
+    // handleCombos(combos, 1);
   }
 
   function testGrid(): void {

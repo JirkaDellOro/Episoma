@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     var ƒ = FudgeCore;
     class CameraOrbit extends ƒ.Node {
         constructor(_maxRotX) {
@@ -60,6 +60,6 @@ var L13_Craftris;
             return (4 + Math.floor((-this.getRotationY() + 45) / 90)) % 4;
         }
     }
-    L13_Craftris.CameraOrbit = CameraOrbit;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.CameraOrbit = CameraOrbit;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Camera.js.map

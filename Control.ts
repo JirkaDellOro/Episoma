@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
   import ƒ = FudgeCore;
 
   export interface Transformation {
@@ -39,8 +39,6 @@ namespace L13_Craftris {
       controls[ƒ.KEYBOARD_CODE.D] = { translation: ƒ.Vector3.X(1) };
       controls[ƒ.KEYBOARD_CODE.Q] = { translation: ƒ.Vector3.Y(1) };
       controls[ƒ.KEYBOARD_CODE.E] = { translation: ƒ.Vector3.Y(-1) };
-      // controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT] = controls[ƒ.KEYBOARD_CODE.SHIFT_RIGHT] = { translation: ƒ.Vector3.Y(1) };
-      // controls[ƒ.KEYBOARD_CODE.CTRL_LEFT] = controls[ƒ.KEYBOARD_CODE.CTRL_RIGHT] = { translation: ƒ.Vector3.Y(-1) };
       return controls;
     }
 
@@ -54,9 +52,7 @@ namespace L13_Craftris {
     public pickFragment(_viewport: ƒ.Viewport, _pos: ƒ.Vector2): boolean {
       for (let node of this.fragment.getChildren()) {
         let projection: ƒ.Vector3 = camera.cmpCamera.project(node.mtxWorld.translation);
-        // let posCanvas: ƒ.Vector2 = _viewport.pointClipToCanvas(projection.toVector2());
         let posClient: ƒ.Vector2 = _viewport.pointClipToClient(projection.toVector2());
-        // ƒ.Debug.log(posCanvas.toString() + " | " + posClient.toString());
         // beware! magic numbers here...
         if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z - 0.5) * 400)
           // ƒ.Debug.log(node.name + " | " + projection.toString());
@@ -80,6 +76,7 @@ namespace L13_Craftris {
     }
 
     public rotateToSegment(_segment: number): void {
+      // ƒ.Debug.log(_segment, this.segment);
       while (_segment != this.segment) {
         this.rotatePerspektive(-90);
         this.segment = ++this.segment % 4;

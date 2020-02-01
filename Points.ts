@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
 
   class DomLabel {
     private static maxLifeTime: number = 1000; // in milliseconds

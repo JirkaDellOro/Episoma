@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     var ƒ = FudgeCore;
     class Control extends ƒ.Node {
         constructor() {
@@ -22,8 +22,6 @@ var L13_Craftris;
             controls[ƒ.KEYBOARD_CODE.D] = { translation: ƒ.Vector3.X(1) };
             controls[ƒ.KEYBOARD_CODE.Q] = { translation: ƒ.Vector3.Y(1) };
             controls[ƒ.KEYBOARD_CODE.E] = { translation: ƒ.Vector3.Y(-1) };
-            // controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT] = controls[ƒ.KEYBOARD_CODE.SHIFT_RIGHT] = { translation: ƒ.Vector3.Y(1) };
-            // controls[ƒ.KEYBOARD_CODE.CTRL_LEFT] = controls[ƒ.KEYBOARD_CODE.CTRL_RIGHT] = { translation: ƒ.Vector3.Y(-1) };
             return controls;
         }
         setFragment(_fragment) {
@@ -34,10 +32,8 @@ var L13_Craftris;
         }
         pickFragment(_viewport, _pos) {
             for (let node of this.fragment.getChildren()) {
-                let projection = L13_Craftris.camera.cmpCamera.project(node.mtxWorld.translation);
-                // let posCanvas: ƒ.Vector2 = _viewport.pointClipToCanvas(projection.toVector2());
+                let projection = Episoma.camera.cmpCamera.project(node.mtxWorld.translation);
                 let posClient = _viewport.pointClipToClient(projection.toVector2());
-                // ƒ.Debug.log(posCanvas.toString() + " | " + posClient.toString());
                 // beware! magic numbers here...
                 if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z - 0.5) * 400)
                     // ƒ.Debug.log(node.name + " | " + projection.toString());
@@ -58,6 +54,7 @@ var L13_Craftris;
             mtxFragment.rotateY(-_angle, true);
         }
         rotateToSegment(_segment) {
+            // ƒ.Debug.log(_segment, this.segment);
             while (_segment != this.segment) {
                 this.rotatePerspektive(-90);
                 this.segment = ++this.segment % 4;
@@ -72,7 +69,7 @@ var L13_Craftris;
             ƒ.RenderManager.update();
             let collisions = [];
             for (let cube of this.fragment.getChildren()) {
-                let element = L13_Craftris.grid.pull(cube.mtxWorld.translation);
+                let element = Episoma.grid.pull(cube.mtxWorld.translation);
                 if (element)
                     collisions.push({ element: element, cube: cube });
             }
@@ -85,8 +82,8 @@ var L13_Craftris;
             for (let cube of this.fragment.getChildren()) {
                 let position = cube.mtxWorld.translation;
                 cube.cmpTransform.local.translation = position;
-                let element = new L13_Craftris.GridElement(cube);
-                L13_Craftris.grid.push(position, element);
+                let element = new Episoma.GridElement(cube);
+                Episoma.grid.push(position, element);
                 frozen.push(element);
             }
             for (let child of this.getChildren())
@@ -97,13 +94,13 @@ var L13_Craftris;
             let neighbors = [];
             let children = this.fragment.getChildren();
             for (let cube of children) {
-                let found = L13_Craftris.grid.findNeighbors(cube.mtxWorld.translation);
+                let found = Episoma.grid.findNeighbors(cube.mtxWorld.translation);
                 neighbors.push(...found);
             }
             return neighbors.length > 0;
         }
     }
     Control.transformations = Control.defineControls();
-    L13_Craftris.Control = Control;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Control = Control;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Control.js.map

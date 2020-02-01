@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
   import ƒ = FudgeCore;
 
   export class Fragment extends ƒ.Node {

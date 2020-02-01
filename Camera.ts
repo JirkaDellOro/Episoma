@@ -1,4 +1,4 @@
-namespace L13_Craftris {
+namespace Episoma {
   import ƒ = FudgeCore;
 
   export class CameraOrbit extends ƒ.Node {

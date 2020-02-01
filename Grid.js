@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     var ƒ = FudgeCore;
     class GridElement {
         constructor(_cube = null) {
@@ -16,7 +16,7 @@ var L13_Craftris;
                 this.cube.cmpTransform.local.translation = _new;
         }
     }
-    L13_Craftris.GridElement = GridElement;
+    Episoma.GridElement = GridElement;
     class Grid extends Map {
         // private grid: Map<string, Cube> = new Map();
         constructor() {
@@ -28,7 +28,7 @@ var L13_Craftris;
                 ƒ.Debug.warn("Grid push to occupied position, popped: ", key);
             this.set(key, _element);
             if (_element && _addToGame)
-                L13_Craftris.game.appendChild(_element.cube);
+                Episoma.game.appendChild(_element.cube);
         }
         pull(_position) {
             let key = this.toKey(_position);
@@ -48,7 +48,7 @@ var L13_Craftris;
             let empty = [];
             for (let offset of Grid.cardinals) {
                 let posNeighbor = ƒ.Vector3.SUM(_of, offset);
-                let neighbor = L13_Craftris.grid.pull(posNeighbor);
+                let neighbor = Episoma.grid.pull(posNeighbor);
                 if (neighbor)
                     found.push(neighbor);
                 else
@@ -84,6 +84,6 @@ var L13_Craftris;
         }
     }
     Grid.cardinals = [ƒ.Vector3.X(1), ƒ.Vector3.X(-1), ƒ.Vector3.Y(1), ƒ.Vector3.Y(-1), ƒ.Vector3.Z(1), ƒ.Vector3.Z(-1)];
-    L13_Craftris.Grid = Grid;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Grid = Grid;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Grid.js.map

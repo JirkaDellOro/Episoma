@@ -1,7 +1,7 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
-    L13_Craftris.ƒ = FudgeCore;
+var Episoma;
+(function (Episoma) {
+    Episoma.ƒ = FudgeCore;
     let GAME_STATE;
     (function (GAME_STATE) {
         GAME_STATE[GAME_STATE["START"] = 0] = "START";
@@ -10,8 +10,8 @@ var L13_Craftris;
         GAME_STATE[GAME_STATE["OVER"] = 3] = "OVER";
     })(GAME_STATE || (GAME_STATE = {}));
     window.addEventListener("load", hndLoad);
-    L13_Craftris.game = new L13_Craftris.ƒ.Node("FudgeCraft");
-    L13_Craftris.grid = new L13_Craftris.Grid();
+    Episoma.game = new Episoma.ƒ.Node("FudgeCraft");
+    Episoma.grid = new Episoma.Grid();
     let state = GAME_STATE.START;
     let controlActive;
     let controls = [];
@@ -20,56 +20,56 @@ var L13_Craftris;
     let speedCameraTranslation = 0.02;
     function hndLoad(_event) {
         const canvas = document.querySelector("canvas");
-        L13_Craftris.args = new URLSearchParams(location.search);
-        L13_Craftris.ƒ.RenderManager.initialize(true, true);
-        L13_Craftris.ƒ.Debug.log("Canvas", canvas);
+        Episoma.args = new URLSearchParams(location.search);
+        Episoma.ƒ.RenderManager.initialize(true, true);
+        Episoma.ƒ.Debug.log("Canvas", canvas);
         // enable unlimited mouse-movement (user needs to click on canvas first)
         canvas.addEventListener("mousedown", canvas.requestPointerLock);
         canvas.addEventListener("mouseup", () => document.exitPointerLock());
         canvas.addEventListener("click", handleClick);
         // set lights
-        let cmpLight = new L13_Craftris.ƒ.ComponentLight(new L13_Craftris.ƒ.LightDirectional(L13_Craftris.ƒ.Color.CSS("WHITE")));
-        cmpLight.pivot.lookAt(new L13_Craftris.ƒ.Vector3(0.5, 1, 0.8));
-        let cmpLightAmbient = new L13_Craftris.ƒ.ComponentLight(new L13_Craftris.ƒ.LightAmbient(new L13_Craftris.ƒ.Color(0.25, 0.25, 0.25, 1)));
-        L13_Craftris.game.addComponent(cmpLightAmbient);
+        let cmpLight = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightDirectional(Episoma.ƒ.Color.CSS("WHITE")));
+        cmpLight.pivot.lookAt(new Episoma.ƒ.Vector3(0.5, 1, 0.8));
+        let cmpLightAmbient = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightAmbient(new Episoma.ƒ.Color(0.25, 0.25, 0.25, 1)));
+        Episoma.game.addComponent(cmpLightAmbient);
         // setup orbiting camera
-        L13_Craftris.camera = new L13_Craftris.CameraOrbit(75);
-        L13_Craftris.game.appendChild(L13_Craftris.camera);
-        L13_Craftris.camera.setRotationX(-20);
-        L13_Craftris.camera.setRotationY(20);
-        L13_Craftris.camera.cmpCamera.getContainer().addComponent(cmpLight);
+        Episoma.camera = new Episoma.CameraOrbit(75);
+        Episoma.game.appendChild(Episoma.camera);
+        Episoma.camera.setRotationX(-20);
+        Episoma.camera.setRotationY(20);
+        Episoma.camera.cmpCamera.getContainer().addComponent(cmpLight);
         // setup viewport
-        viewport = new L13_Craftris.ƒ.Viewport();
-        viewport.initialize("Viewport", L13_Craftris.game, L13_Craftris.camera.cmpCamera, canvas);
-        L13_Craftris.ƒ.Debug.log("Viewport", viewport);
-        L13_Craftris.points = new L13_Craftris.Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
+        viewport = new Episoma.ƒ.Viewport();
+        viewport.initialize("Viewport", Episoma.game, Episoma.camera.cmpCamera, canvas);
+        Episoma.ƒ.Debug.log("Viewport", viewport);
+        Episoma.points = new Episoma.Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
         // setup event handling
         viewport.activatePointerEvent("\u0192pointermove" /* MOVE */, true);
         viewport.activateWheelEvent("\u0192wheel" /* WHEEL */, true);
         viewport.addEventListener("\u0192pointermove" /* MOVE */, hndPointerMove);
         viewport.addEventListener("\u0192wheel" /* WHEEL */, hndWheelMove);
-        if (L13_Craftris.args.get("test"))
-            L13_Craftris.startTests();
+        if (Episoma.args.get("test"))
+            Episoma.startTests();
         else
             start();
         for (let control of controls)
-            L13_Craftris.game.appendChild(control);
+            Episoma.game.appendChild(control);
         controlActive = controls[0];
         updateDisplay();
-        L13_Craftris.ƒ.Debug.log("Game", L13_Craftris.game);
+        Episoma.ƒ.Debug.log("Game", Episoma.game);
     }
     function setState(_new) {
         state = _new;
-        L13_Craftris.ƒ.Debug.log("State", state);
+        Episoma.ƒ.Debug.log("State", state);
     }
     async function start() {
         setState(GAME_STATE.MENU);
-        L13_Craftris.grid.push(L13_Craftris.ƒ.Vector3.ZERO(), new L13_Craftris.GridElement(new L13_Craftris.Cube(L13_Craftris.CUBE_TYPE.BLACK, L13_Craftris.ƒ.Vector3.ZERO())), true);
+        Episoma.grid.push(Episoma.ƒ.Vector3.ZERO(), new Episoma.GridElement(new Episoma.Cube(Episoma.CUBE_TYPE.BLACK, Episoma.ƒ.Vector3.ZERO())), true);
         for (let i = 0; i < 4; i++)
             startRandomFragment();
-        L13_Craftris.ƒ.Debug.log("Wait for space");
-        await waitForKeyPress(L13_Craftris.ƒ.KEYBOARD_CODE.SPACE);
-        L13_Craftris.ƒ.Debug.log("Space pressed");
+        Episoma.ƒ.Debug.log("Wait for space");
+        await waitForKeyPress(Episoma.ƒ.KEYBOARD_CODE.SPACE);
+        Episoma.ƒ.Debug.log("Space pressed");
         let domMenu = document.querySelector("div#Menu");
         domMenu.style.visibility = "hidden";
         window.addEventListener("keydown", hndKeyDown); // activate when user starts...
@@ -94,7 +94,7 @@ var L13_Craftris;
         });
     }
     function startCountDown() {
-        let countDown = new L13_Craftris.ƒ.Time();
+        let countDown = new Episoma.ƒ.Time();
         countDown.setTimer(1000, 0, showCountDown);
         function showCountDown(_event) {
             let time = 3 * 60 * 1000 - countDown.get();
@@ -107,46 +107,47 @@ var L13_Craftris;
         }
     }
     function displayTime(_time) {
-        let units = L13_Craftris.ƒ.Time.getUnits(_time);
+        let units = Episoma.ƒ.Time.getUnits(_time);
         let domTime = document.querySelector("h1#Time");
         domTime.textContent = units.minutes.toString().padStart(2, "0") + ":" + units.seconds.toString().padStart(2, "0");
     }
     function updateDisplay() {
         viewport.draw();
     }
-    L13_Craftris.updateDisplay = updateDisplay;
+    Episoma.updateDisplay = updateDisplay;
     //#region Interaction
     function handleClick(_event) {
-        let mouse = new L13_Craftris.ƒ.Vector2(_event.offsetX, _event.offsetY);
+        let mouse = new Episoma.ƒ.Vector2(_event.offsetX, _event.offsetY);
         for (let control of controls)
             if (control.pickFragment(viewport, mouse))
                 controlActive = control;
+        controlActive.rotateToSegment(Episoma.camera.getSegmentY());
     }
     function hndPointerMove(_event) {
         if (!document.pointerLockElement)
             return;
         // let segmentBefore: number = camera.getSegmentY();
-        L13_Craftris.camera.rotateY(_event.movementX * speedCameraRotation);
-        L13_Craftris.camera.rotateX(_event.movementY * speedCameraRotation);
+        Episoma.camera.rotateY(_event.movementX * speedCameraRotation);
+        Episoma.camera.rotateX(_event.movementY * speedCameraRotation);
         // let segmentAfter: number = camera.getSegmentY();
         // if (segmentAfter - segmentBefore) {
-        if (!L13_Craftris.ƒ.Time.game.hasTimers())
-            controlActive.rotateToSegment(L13_Craftris.camera.getSegmentY());
+        if (!Episoma.ƒ.Time.game.hasTimers())
+            controlActive.rotateToSegment(Episoma.camera.getSegmentY());
         // }
         updateDisplay();
     }
     function hndWheelMove(_event) {
-        L13_Craftris.camera.translate(_event.deltaY * speedCameraTranslation);
+        Episoma.camera.translate(_event.deltaY * speedCameraTranslation);
         updateDisplay();
     }
     function hndKeyDown(_event) {
-        if (L13_Craftris.ƒ.Time.game.hasTimers())
+        if (Episoma.ƒ.Time.game.hasTimers())
             return;
-        if (_event.code == L13_Craftris.ƒ.KEYBOARD_CODE.SPACE) {
+        if (_event.code == Episoma.ƒ.KEYBOARD_CODE.SPACE) {
             dropFragment();
         }
-        let code = (_event.shiftKey ? L13_Craftris.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
-        let transformation = L13_Craftris.Control.transformations[code];
+        let code = (_event.shiftKey ? Episoma.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
+        let transformation = Episoma.Control.transformations[code];
         if (transformation)
             move(transformation);
         updateDisplay();
@@ -154,18 +155,18 @@ var L13_Craftris;
     //#endregion
     //#region Start/Drop Fragments
     function startRandomFragment() {
-        let fragment = L13_Craftris.Fragment.getRandom();
-        let cardinals = Array.from(L13_Craftris.Grid.cardinals);
-        let control = new L13_Craftris.Control();
-        control.cmpTransform.local.translation = L13_Craftris.ƒ.Vector3.ZERO();
+        let fragment = Episoma.Fragment.getRandom();
+        let cardinals = Array.from(Episoma.Grid.cardinals);
+        let control = new Episoma.Control();
+        control.cmpTransform.local.translation = Episoma.ƒ.Vector3.ZERO();
         control.setFragment(fragment);
         updateDisplay();
         let start;
         try {
             do {
-                let index = L13_Craftris.ƒ.random.getIndex(cardinals);
+                let index = Episoma.ƒ.random.getIndex(cardinals);
                 let offset = cardinals.splice(index, 1)[0];
-                start = { translation: L13_Craftris.ƒ.Vector3.SCALE(offset, 5), rotation: L13_Craftris.ƒ.Vector3.ZERO() };
+                start = { translation: Episoma.ƒ.Vector3.SCALE(offset, 5), rotation: Episoma.ƒ.Vector3.ZERO() };
             } while (control.checkCollisions(start).length > 0);
         }
         catch (_error) {
@@ -175,100 +176,97 @@ var L13_Craftris;
         updateDisplay();
         controls.push(control);
     }
-    L13_Craftris.startRandomFragment = startRandomFragment;
+    Episoma.startRandomFragment = startRandomFragment;
     async function dropFragment() {
-        if (!controlActive.isConnected()) {
-            callToAction("CONNECT TO EXISTING CUBES!");
-            return;
-        }
-        L13_Craftris.points.clearCalc();
-        let dropped = controlActive.dropFragment();
-        let combos = new L13_Craftris.Combos(dropped);
-        callToAction("CREATE COMBOS OF 3 OR MORE!");
-        let iCombo = await handleCombos(combos, 0);
-        if (iCombo > 0) {
-            compressAndHandleCombos(iCombo);
-            if (L13_Craftris.ƒ.random.getBoolean())
-                callToAction("MULTIPLE COMBOS SCORE HIGHER!");
-            else
-                callToAction("LARGER COMBOS SCORE HIGHER!");
-        }
-        startRandomFragment();
+        // if (!controlActive.isConnected()) {
+        //   callToAction("CONNECT TO EXISTING CUBES!");
+        //   return;
+        // }
+        // points.clearCalc();
+        // let dropped: GridElement[] = controlActive.dropFragment();
+        // let combos: Combos = new Combos(dropped);
+        // callToAction("CREATE COMBOS OF 3 OR MORE!");
+        // let iCombo: number = await handleCombos(combos, 0);
+        // if (iCombo > 0) {
+        //   compressAndHandleCombos(iCombo);
+        //   if (ƒ.random.getBoolean())
+        //     callToAction("MULTIPLE COMBOS SCORE HIGHER!");
+        //   else
+        //     callToAction("LARGER COMBOS SCORE HIGHER!");
+        // }
+        // startRandomFragment();
         updateDisplay();
     }
     //#endregion
     //#region Combos & Compression
-    async function compressAndHandleCombos(_iCombo) {
-        let moves;
-        let iCombo = _iCombo;
-        do {
-            moves = compress();
-            await L13_Craftris.ƒ.Time.game.delay(400);
-            let moved = moves.map(_move => _move.element);
-            let combos = new L13_Craftris.Combos(moved);
-            let iCounted = await handleCombos(combos, iCombo);
-            iCombo += iCounted;
-        } while (moves.length > 0);
-    }
-    L13_Craftris.compressAndHandleCombos = compressAndHandleCombos;
-    async function handleCombos(_combos, _iCombo) {
-        let iCombo = 0;
-        for (let combo of _combos.found)
-            if (combo.length > 2) {
-                iCombo++;
-                L13_Craftris.points.showCombo(combo, _iCombo + iCombo);
-                for (let shrink = Math.PI - Math.asin(0.9); shrink >= 0; shrink -= 0.2) {
-                    for (let element of combo) {
-                        let mtxLocal = element.cube.cmpTransform.local;
-                        mtxLocal.scaling = L13_Craftris.ƒ.Vector3.ONE(Math.sin(shrink) * 1.2);
-                    }
-                    updateDisplay();
-                    await L13_Craftris.ƒ.Time.game.delay(20);
-                }
-                for (let element of combo)
-                    L13_Craftris.grid.pop(element.position);
-            }
-        updateDisplay();
-        return iCombo;
-    }
-    L13_Craftris.handleCombos = handleCombos;
+    // export async function compressAndHandleCombos(_iCombo: number): Promise<void> {
+    //   let moves: Move[];
+    //   let iCombo: number = _iCombo;
+    //   do {
+    //     moves = compress();
+    //     await ƒ.Time.game.delay(400);
+    //     let moved: GridElement[] = moves.map(_move => _move.element);
+    //     let combos: Combos = new Combos(moved);
+    //     let iCounted: number = await handleCombos(combos, iCombo);
+    //     iCombo += iCounted;
+    //   } while (moves.length > 0);
+    // }
+    // export async function handleCombos(_combos: Combos, _iCombo: number): Promise<number> {
+    //   let iCombo: number = 0;
+    //   for (let combo of _combos.found)
+    //     if (combo.length > 2) {
+    //       iCombo++;
+    //       points.showCombo(combo, _iCombo + iCombo);
+    //       for (let shrink: number = Math.PI - Math.asin(0.9); shrink >= 0; shrink -= 0.2) {
+    //         for (let element of combo) {
+    //           let mtxLocal: ƒ.Matrix4x4 = element.cube.cmpTransform.local;
+    //           mtxLocal.scaling = ƒ.Vector3.ONE(Math.sin(shrink) * 1.2);
+    //         }
+    //         updateDisplay();
+    //         await ƒ.Time.game.delay(20);
+    //       }
+    //       for (let element of combo)
+    //         grid.pop(element.position);
+    //     }
+    //   updateDisplay();
+    //   return iCombo;
+    // }
     function move(_transformation) {
         let animationSteps = 5;
         let fullRotation = 90;
         let fullTranslation = 1;
         let move = {
-            rotation: _transformation.rotation ? L13_Craftris.ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new L13_Craftris.ƒ.Vector3(),
-            translation: _transformation.translation ? L13_Craftris.ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new L13_Craftris.ƒ.Vector3()
+            rotation: _transformation.rotation ? Episoma.ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new Episoma.ƒ.Vector3(),
+            translation: _transformation.translation ? Episoma.ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new Episoma.ƒ.Vector3()
         };
         if (controlActive.checkCollisions(move).length > 0)
             return;
         move.translation.scale(1 / animationSteps);
         move.rotation.scale(1 / animationSteps);
-        L13_Craftris.ƒ.Time.game.setTimer(20, animationSteps, function (_event) {
+        Episoma.ƒ.Time.game.setTimer(20, animationSteps, function (_event) {
             controlActive.move(move);
             updateDisplay();
         });
     }
-    function compress() {
-        let moves = L13_Craftris.grid.compress();
-        for (let move of moves) {
-            L13_Craftris.grid.pop(move.element.position);
-            L13_Craftris.grid.push(move.target, move.element);
-        }
-        let animationSteps = 5;
-        L13_Craftris.ƒ.Time.game.setTimer(20, animationSteps, function (_event) {
-            for (let move of moves) {
-                let translation = L13_Craftris.ƒ.Vector3.DIFFERENCE(move.target, move.element.position);
-                translation.normalize(1 / animationSteps);
-                move.element.position = L13_Craftris.ƒ.Vector3.SUM(move.element.position, translation);
-                if (_event.lastCall)
-                    move.element.position = move.target;
-            }
-            updateDisplay();
-        });
-        return moves;
-    }
-    L13_Craftris.compress = compress;
+    // export function compress(): Move[] {
+    //   let moves: Move[] = grid.compress();
+    //   for (let move of moves) {
+    //     grid.pop(move.element.position);
+    //     grid.push(move.target, move.element);
+    //   }
+    //   let animationSteps: number = 5;
+    //   ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
+    //     for (let move of moves) {
+    //       let translation: ƒ.Vector3 = ƒ.Vector3.DIFFERENCE(move.target, move.element.position);
+    //       translation.normalize(1 / animationSteps);
+    //       move.element.position = ƒ.Vector3.SUM(move.element.position, translation);
+    //       if (_event.lastCall)
+    //         move.element.position = move.target;
+    //     }
+    //     updateDisplay();
+    //   });
+    //   return moves;
+    // }
     //#endregion
     function callToAction(_message) {
         let span = document.querySelector("span#CallToAction");
@@ -277,5 +275,5 @@ var L13_Craftris;
         isNaN(span.offsetHeight); // stupid hack to restart css-animation, read offsetHeight
         span.style.animation = null;
     }
-})(L13_Craftris || (L13_Craftris = {}));
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Main.js.map

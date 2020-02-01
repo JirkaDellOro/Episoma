@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     class DomLabel {
         constructor(_domElement, _node) {
             this.lifeTime = DomLabel.maxLifeTime;
@@ -24,7 +24,7 @@ var L13_Craftris;
         constructor(_viewport, _domScore, _domCalculation) {
             super();
             this.score = 0;
-            this.time = new L13_Craftris.ƒ.Time();
+            this.time = new Episoma.ƒ.Time();
             this.animate = (_event) => {
                 let lapse = _event.target.lapse;
                 for (let i = this.length - 1; i >= 0; i--) {
@@ -53,7 +53,7 @@ var L13_Craftris;
             let text = _iCombo + ". combo of " + _combo.length + " cubes ⇨ " + pointsCombo;
             this.addLineCalc(text, _combo[0].cube.getColor().getCSS());
             this.domScore.textContent = "Score: " + this.score;
-            L13_Craftris.ƒ.Debug.log(text);
+            Episoma.ƒ.Debug.log(text);
         }
         create(_element, _points) {
             let domPoints = document.createElement("span");
@@ -78,6 +78,6 @@ var L13_Craftris;
             this.domCalculation.innerHTML = "";
         }
     }
-    L13_Craftris.Points = Points;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Points = Points;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Points.js.map

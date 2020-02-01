@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     var ƒ = FudgeCore;
     class Fragment extends ƒ.Node {
         constructor(_shape, _position = ƒ.Vector3.ZERO()) {
@@ -10,11 +10,11 @@ var L13_Craftris;
             for (let position of shape) {
                 let type;
                 do {
-                    type = Fragment.getRandomEnum(L13_Craftris.CUBE_TYPE);
-                } while (type == L13_Craftris.CUBE_TYPE.BLACK);
+                    type = Fragment.getRandomEnum(Episoma.CUBE_TYPE);
+                } while (type == Episoma.CUBE_TYPE.BLACK);
                 let vctPosition = ƒ.Vector3.ZERO();
                 vctPosition.set(position[0], position[1], position[2]);
-                let cube = new L13_Craftris.Cube(type, vctPosition);
+                let cube = new Episoma.Cube(type, vctPosition);
                 this.appendChild(cube);
             }
             this.addComponent(new ƒ.ComponentTransform(ƒ.Matrix4x4.TRANSLATION(_position)));
@@ -40,6 +40,6 @@ var L13_Craftris;
         }
     }
     Fragment.shapes = Fragment.getShapeArray();
-    L13_Craftris.Fragment = Fragment;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Fragment = Fragment;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Fragment.js.map

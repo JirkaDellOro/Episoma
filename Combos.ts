@@ -1,5 +1,5 @@
 
-namespace L13_Craftris {
+namespace Episoma {
   export class Combos {
     found: GridElement[][] = [];
 

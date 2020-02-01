@@ -1,6 +1,6 @@
 "use strict";
-var L13_Craftris;
-(function (L13_Craftris) {
+var Episoma;
+(function (Episoma) {
     var ƒ = FudgeCore;
     let CUBE_TYPE;
     (function (CUBE_TYPE) {
@@ -11,7 +11,7 @@ var L13_Craftris;
         CUBE_TYPE["MAGENTA"] = "Magenta";
         CUBE_TYPE["CYAN"] = "Cyan";
         CUBE_TYPE["BLACK"] = "Black";
-    })(CUBE_TYPE = L13_Craftris.CUBE_TYPE || (L13_Craftris.CUBE_TYPE = {}));
+    })(CUBE_TYPE = Episoma.CUBE_TYPE || (Episoma.CUBE_TYPE = {}));
     class Cube extends ƒ.Node {
         constructor(_type, _position) {
             super("Cube." + _type);
@@ -41,6 +41,6 @@ var L13_Craftris;
     }
     Cube.mesh = new ƒ.MeshCube();
     Cube.materials = Cube.createMaterials();
-    L13_Craftris.Cube = Cube;
-})(L13_Craftris || (L13_Craftris = {}));
+    Episoma.Cube = Cube;
+})(Episoma || (Episoma = {}));
 //# sourceMappingURL=Cube.js.map
