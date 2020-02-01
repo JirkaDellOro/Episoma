@@ -51,6 +51,18 @@ namespace L13_Craftris {
       this.fragment = _fragment;
     }
 
+    public pickFragment(_viewport: ƒ.Viewport, _pos: ƒ.Vector2): void {
+      for (let node of this.fragment.getChildren()) {
+        let projection: ƒ.Vector3 = camera.cmpCamera.project(node.mtxWorld.translation);
+        // let posCanvas: ƒ.Vector2 = _viewport.pointClipToCanvas(projection.toVector2());
+        let posClient: ƒ.Vector2 = _viewport.pointClipToClient(projection.toVector2());
+        // ƒ.Debug.log(posCanvas.toString() + " | " + posClient.toString());
+        // beware! magic numbers here...
+        if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z-0.5) * 400)
+          ƒ.Debug.log(node.name + " | " + projection.toString());
+      }
+    }
+
     public move(_transformation: Transformation): void {
       let mtxContainer: ƒ.Matrix4x4 = this.cmpTransform.local;
       let mtxFragment: ƒ.Matrix4x4 = this.fragment.cmpTransform.local;

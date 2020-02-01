@@ -130,7 +130,23 @@ namespace L13_Craftris {
 
   //#region Interaction
   function handleClick(_event: MouseEvent): void {
-    ƒ.Debug.log("Click");
+    // ƒ.Debug.log("Click");
+    // viewport.createPickBuffers();
+
+    let mouse: ƒ.Vector2 = new ƒ.Vector2(_event.offsetX, _event.offsetY);
+    // ƒ.Debug.log(mouse.toString());
+    control.pickFragment(viewport, mouse);
+    // pickNodeAt(mouse);
+    // updateDisplay();
+
+    // function pickNodeAt(_pos: ƒ.Vector2): void {
+    //   let posRender: ƒ.Vector2 = viewport.pointClientToRender(
+    //     new ƒ.Vector2(_pos.x, viewport.getClientRectangle().height - _pos.y)
+    //   );
+    //   let hits: ƒ.RayHit[] = viewport.pickNodeAt(posRender);
+    //   for (let hit of hits)
+    //    ƒ.Debug.log(hit.node.name + ":" + hit.zBuffer);
+    // }
   }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
@@ -161,11 +177,6 @@ namespace L13_Craftris {
     if (_event.code == ƒ.KEYBOARD_CODE.SPACE) {
       dropFragment();
     }
-
-    // if (_event.code == ƒ.KEYBOARD_CODE.Q)
-    //   control.rotatePerspektive(-90);
-    // if (_event.code == ƒ.KEYBOARD_CODE.E)
-    //   control.rotatePerspektive(90);
 
     let code: string = (_event.shiftKey ? ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
     let transformation: Transformation = Control.transformations[code];

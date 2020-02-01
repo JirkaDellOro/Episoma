@@ -32,6 +32,17 @@ var L13_Craftris;
             this.appendChild(_fragment);
             this.fragment = _fragment;
         }
+        pickFragment(_viewport, _pos) {
+            for (let node of this.fragment.getChildren()) {
+                let projection = L13_Craftris.camera.cmpCamera.project(node.mtxWorld.translation);
+                // let posCanvas: ƒ.Vector2 = _viewport.pointClipToCanvas(projection.toVector2());
+                let posClient = _viewport.pointClipToClient(projection.toVector2());
+                // ƒ.Debug.log(posCanvas.toString() + " | " + posClient.toString());
+                // beware! magic numbers here...
+                if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z - 0.5) * 400)
+                    ƒ.Debug.log(node.name + " | " + projection.toString());
+            }
+        }
         move(_transformation) {
             let mtxContainer = this.cmpTransform.local;
             let mtxFragment = this.fragment.cmpTransform.local;

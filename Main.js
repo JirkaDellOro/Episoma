@@ -114,7 +114,21 @@ var L13_Craftris;
     L13_Craftris.updateDisplay = updateDisplay;
     //#region Interaction
     function handleClick(_event) {
-        L13_Craftris.ƒ.Debug.log("Click");
+        // ƒ.Debug.log("Click");
+        // viewport.createPickBuffers();
+        let mouse = new L13_Craftris.ƒ.Vector2(_event.offsetX, _event.offsetY);
+        // ƒ.Debug.log(mouse.toString());
+        control.pickFragment(viewport, mouse);
+        // pickNodeAt(mouse);
+        // updateDisplay();
+        // function pickNodeAt(_pos: ƒ.Vector2): void {
+        //   let posRender: ƒ.Vector2 = viewport.pointClientToRender(
+        //     new ƒ.Vector2(_pos.x, viewport.getClientRectangle().height - _pos.y)
+        //   );
+        //   let hits: ƒ.RayHit[] = viewport.pickNodeAt(posRender);
+        //   for (let hit of hits)
+        //    ƒ.Debug.log(hit.node.name + ":" + hit.zBuffer);
+        // }
     }
     function hndPointerMove(_event) {
         if (!document.pointerLockElement)
@@ -139,10 +153,6 @@ var L13_Craftris;
         if (_event.code == L13_Craftris.ƒ.KEYBOARD_CODE.SPACE) {
             dropFragment();
         }
-        // if (_event.code == ƒ.KEYBOARD_CODE.Q)
-        //   control.rotatePerspektive(-90);
-        // if (_event.code == ƒ.KEYBOARD_CODE.E)
-        //   control.rotatePerspektive(90);
         let code = (_event.shiftKey ? L13_Craftris.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
         let transformation = L13_Craftris.Control.transformations[code];
         if (transformation)
