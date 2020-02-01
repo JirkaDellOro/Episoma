@@ -132,11 +132,12 @@ var L13_Craftris;
         if (_event.code == L13_Craftris.ƒ.KEYBOARD_CODE.SPACE) {
             dropFragment();
         }
-        if (_event.code == L13_Craftris.ƒ.KEYBOARD_CODE.Q)
-            control.rotatePerspektive(-90);
-        if (_event.code == L13_Craftris.ƒ.KEYBOARD_CODE.E)
-            control.rotatePerspektive(90);
-        let transformation = L13_Craftris.Control.transformations[_event.code];
+        // if (_event.code == ƒ.KEYBOARD_CODE.Q)
+        //   control.rotatePerspektive(-90);
+        // if (_event.code == ƒ.KEYBOARD_CODE.E)
+        //   control.rotatePerspektive(90);
+        let code = (_event.shiftKey ? L13_Craftris.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
+        let transformation = L13_Craftris.Control.transformations[code];
         if (transformation)
             move(transformation);
         updateDisplay();

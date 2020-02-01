@@ -155,12 +155,13 @@ namespace L13_Craftris {
       dropFragment();
     }
 
-    if (_event.code == ƒ.KEYBOARD_CODE.Q)
-      control.rotatePerspektive(-90);
-    if (_event.code == ƒ.KEYBOARD_CODE.E)
-      control.rotatePerspektive(90);
+    // if (_event.code == ƒ.KEYBOARD_CODE.Q)
+    //   control.rotatePerspektive(-90);
+    // if (_event.code == ƒ.KEYBOARD_CODE.E)
+    //   control.rotatePerspektive(90);
 
-    let transformation: Transformation = Control.transformations[_event.code];
+    let code: string = (_event.shiftKey ? ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
+    let transformation: Transformation = Control.transformations[code];
     if (transformation)
       move(transformation);
 
