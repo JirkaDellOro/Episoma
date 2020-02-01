@@ -14,7 +14,8 @@ namespace L13_Craftris {
   export let points: Points;
 
   let state: GAME_STATE = GAME_STATE.START;
-  let control: Control = new Control();
+  let control: Control;
+  let controls: Control[] = [];
   let viewport: ƒ.Viewport;
   let speedCameraRotation: number = 0.2;
   let speedCameraTranslation: number = 0.02;
@@ -33,7 +34,6 @@ namespace L13_Craftris {
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));
     cmpLight.pivot.lookAt(new ƒ.Vector3(0.5, 1, 0.8));
-    // game.addComponent(cmpLight);
     let cmpLightAmbient: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightAmbient(new ƒ.Color(0.25, 0.25, 0.25, 1)));
     game.addComponent(cmpLightAmbient);
 
@@ -56,12 +56,16 @@ namespace L13_Craftris {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     viewport.addEventListener(ƒ.EVENT_WHEEL.WHEEL, hndWheelMove);
 
-    game.appendChild(control);
+
 
     if (args.get("test"))
       startTests();
     else
       start();
+
+    for (let control of controls)
+      game.appendChild(control);
+    control = controls[0];
 
     updateDisplay();
     ƒ.Debug.log("Game", game);
@@ -75,7 +79,8 @@ namespace L13_Craftris {
   async function start(): Promise<void> {
     setState(GAME_STATE.MENU);
     grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())));
-    startRandomFragment();
+    for (let i: number = 0; i < 4; i++)
+      startRandomFragment();
     ƒ.Debug.log("Wait for space");
     await waitForKeyPress(ƒ.KEYBOARD_CODE.SPACE);
     ƒ.Debug.log("Space pressed");
@@ -192,6 +197,7 @@ namespace L13_Craftris {
   export function startRandomFragment(): void {
     let fragment: Fragment = Fragment.getRandom();
     let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
+    let control: Control = new Control();
     control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
     control.setFragment(fragment);
     updateDisplay();
@@ -201,13 +207,13 @@ namespace L13_Craftris {
         let index: number = ƒ.random.getIndex(cardinals);
         let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
         start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
-        // ƒ.Debug.log(control.checkCollisions(start).length );
       } while (control.checkCollisions(start).length > 0);
     } catch (_error) {
       callToAction("GAME OVER");
     }
     control.move(start);
     updateDisplay();
+    controls.push(control);
   }
 
   async function dropFragment(): Promise<void> {

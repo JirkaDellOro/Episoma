@@ -13,7 +13,8 @@ var L13_Craftris;
     L13_Craftris.game = new L13_Craftris.ƒ.Node("FudgeCraft");
     L13_Craftris.grid = new L13_Craftris.Grid();
     let state = GAME_STATE.START;
-    let control = new L13_Craftris.Control();
+    let control;
+    let controls = [];
     let viewport;
     let speedCameraRotation = 0.2;
     let speedCameraTranslation = 0.02;
@@ -29,7 +30,6 @@ var L13_Craftris;
         // set lights
         let cmpLight = new L13_Craftris.ƒ.ComponentLight(new L13_Craftris.ƒ.LightDirectional(L13_Craftris.ƒ.Color.CSS("WHITE")));
         cmpLight.pivot.lookAt(new L13_Craftris.ƒ.Vector3(0.5, 1, 0.8));
-        // game.addComponent(cmpLight);
         let cmpLightAmbient = new L13_Craftris.ƒ.ComponentLight(new L13_Craftris.ƒ.LightAmbient(new L13_Craftris.ƒ.Color(0.25, 0.25, 0.25, 1)));
         L13_Craftris.game.addComponent(cmpLightAmbient);
         // setup orbiting camera
@@ -48,11 +48,13 @@ var L13_Craftris;
         viewport.activateWheelEvent("\u0192wheel" /* WHEEL */, true);
         viewport.addEventListener("\u0192pointermove" /* MOVE */, hndPointerMove);
         viewport.addEventListener("\u0192wheel" /* WHEEL */, hndWheelMove);
-        L13_Craftris.game.appendChild(control);
         if (L13_Craftris.args.get("test"))
             L13_Craftris.startTests();
         else
             start();
+        for (let control of controls)
+            L13_Craftris.game.appendChild(control);
+        control = controls[0];
         updateDisplay();
         L13_Craftris.ƒ.Debug.log("Game", L13_Craftris.game);
     }
@@ -63,7 +65,8 @@ var L13_Craftris;
     async function start() {
         setState(GAME_STATE.MENU);
         L13_Craftris.grid.push(L13_Craftris.ƒ.Vector3.ZERO(), new L13_Craftris.GridElement(new L13_Craftris.Cube(L13_Craftris.CUBE_TYPE.BLACK, L13_Craftris.ƒ.Vector3.ZERO())));
-        startRandomFragment();
+        for (let i = 0; i < 4; i++)
+            startRandomFragment();
         L13_Craftris.ƒ.Debug.log("Wait for space");
         await waitForKeyPress(L13_Craftris.ƒ.KEYBOARD_CODE.SPACE);
         L13_Craftris.ƒ.Debug.log("Space pressed");
@@ -164,6 +167,7 @@ var L13_Craftris;
     function startRandomFragment() {
         let fragment = L13_Craftris.Fragment.getRandom();
         let cardinals = Array.from(L13_Craftris.Grid.cardinals);
+        let control = new L13_Craftris.Control();
         control.cmpTransform.local.translation = L13_Craftris.ƒ.Vector3.ZERO();
         control.setFragment(fragment);
         updateDisplay();
@@ -173,7 +177,6 @@ var L13_Craftris;
                 let index = L13_Craftris.ƒ.random.getIndex(cardinals);
                 let offset = cardinals.splice(index, 1)[0];
                 start = { translation: L13_Craftris.ƒ.Vector3.SCALE(offset, 5), rotation: L13_Craftris.ƒ.Vector3.ZERO() };
-                // ƒ.Debug.log(control.checkCollisions(start).length );
             } while (control.checkCollisions(start).length > 0);
         }
         catch (_error) {
@@ -181,6 +184,7 @@ var L13_Craftris;
         }
         control.move(start);
         updateDisplay();
+        controls.push(control);
     }
     L13_Craftris.startRandomFragment = startRandomFragment;
     async function dropFragment() {

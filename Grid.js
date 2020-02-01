@@ -27,8 +27,8 @@ var L13_Craftris;
             if (this.pop(_position))
                 ƒ.Debug.warn("Grid push to occupied position, popped: ", key);
             this.set(key, _element);
-            if (_element)
-                L13_Craftris.game.appendChild(_element.cube);
+            // if (_element)
+            //   game.appendChild(_element.cube);
         }
         pull(_position) {
             let key = this.toKey(_position);
@@ -39,8 +39,8 @@ var L13_Craftris;
             let key = this.toKey(_position);
             let element = this.get(key);
             this.delete(key);
-            if (element)
-                L13_Craftris.game.removeChild(element.cube);
+            // if (element)
+            //   game.removeChild(element.cube);
             return element;
         }
         findNeighbors(_of, _empty = false) {
