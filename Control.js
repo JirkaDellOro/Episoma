@@ -40,8 +40,10 @@ var L13_Craftris;
                 // ƒ.Debug.log(posCanvas.toString() + " | " + posClient.toString());
                 // beware! magic numbers here...
                 if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z - 0.5) * 400)
-                    ƒ.Debug.log(node.name + " | " + projection.toString());
+                    // ƒ.Debug.log(node.name + " | " + projection.toString());
+                    return true;
             }
+            return false;
         }
         move(_transformation) {
             let mtxContainer = this.cmpTransform.local;

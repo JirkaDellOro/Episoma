@@ -22,13 +22,13 @@ var L13_Craftris;
         constructor() {
             super();
         }
-        push(_position, _element = null) {
+        push(_position, _element = null, _addToGame = false) {
             let key = this.toKey(_position);
             if (this.pop(_position))
                 ƒ.Debug.warn("Grid push to occupied position, popped: ", key);
             this.set(key, _element);
-            // if (_element)
-            //   game.appendChild(_element.cube);
+            if (_element && _addToGame)
+                L13_Craftris.game.appendChild(_element.cube);
         }
         pull(_position) {
             let key = this.toKey(_position);

@@ -13,7 +13,7 @@ var L13_Craftris;
     L13_Craftris.game = new L13_Craftris.ƒ.Node("FudgeCraft");
     L13_Craftris.grid = new L13_Craftris.Grid();
     let state = GAME_STATE.START;
-    let control;
+    let controlActive;
     let controls = [];
     let viewport;
     let speedCameraRotation = 0.2;
@@ -54,7 +54,7 @@ var L13_Craftris;
             start();
         for (let control of controls)
             L13_Craftris.game.appendChild(control);
-        control = controls[0];
+        controlActive = controls[0];
         updateDisplay();
         L13_Craftris.ƒ.Debug.log("Game", L13_Craftris.game);
     }
@@ -64,7 +64,7 @@ var L13_Craftris;
     }
     async function start() {
         setState(GAME_STATE.MENU);
-        L13_Craftris.grid.push(L13_Craftris.ƒ.Vector3.ZERO(), new L13_Craftris.GridElement(new L13_Craftris.Cube(L13_Craftris.CUBE_TYPE.BLACK, L13_Craftris.ƒ.Vector3.ZERO())));
+        L13_Craftris.grid.push(L13_Craftris.ƒ.Vector3.ZERO(), new L13_Craftris.GridElement(new L13_Craftris.Cube(L13_Craftris.CUBE_TYPE.BLACK, L13_Craftris.ƒ.Vector3.ZERO())), true);
         for (let i = 0; i < 4; i++)
             startRandomFragment();
         L13_Craftris.ƒ.Debug.log("Wait for space");
@@ -117,21 +117,10 @@ var L13_Craftris;
     L13_Craftris.updateDisplay = updateDisplay;
     //#region Interaction
     function handleClick(_event) {
-        // ƒ.Debug.log("Click");
-        // viewport.createPickBuffers();
         let mouse = new L13_Craftris.ƒ.Vector2(_event.offsetX, _event.offsetY);
-        // ƒ.Debug.log(mouse.toString());
-        control.pickFragment(viewport, mouse);
-        // pickNodeAt(mouse);
-        // updateDisplay();
-        // function pickNodeAt(_pos: ƒ.Vector2): void {
-        //   let posRender: ƒ.Vector2 = viewport.pointClientToRender(
-        //     new ƒ.Vector2(_pos.x, viewport.getClientRectangle().height - _pos.y)
-        //   );
-        //   let hits: ƒ.RayHit[] = viewport.pickNodeAt(posRender);
-        //   for (let hit of hits)
-        //    ƒ.Debug.log(hit.node.name + ":" + hit.zBuffer);
-        // }
+        for (let control of controls)
+            if (control.pickFragment(viewport, mouse))
+                controlActive = control;
     }
     function hndPointerMove(_event) {
         if (!document.pointerLockElement)
@@ -142,7 +131,7 @@ var L13_Craftris;
         // let segmentAfter: number = camera.getSegmentY();
         // if (segmentAfter - segmentBefore) {
         if (!L13_Craftris.ƒ.Time.game.hasTimers())
-            control.rotateToSegment(L13_Craftris.camera.getSegmentY());
+            controlActive.rotateToSegment(L13_Craftris.camera.getSegmentY());
         // }
         updateDisplay();
     }
@@ -188,12 +177,12 @@ var L13_Craftris;
     }
     L13_Craftris.startRandomFragment = startRandomFragment;
     async function dropFragment() {
-        if (!control.isConnected()) {
+        if (!controlActive.isConnected()) {
             callToAction("CONNECT TO EXISTING CUBES!");
             return;
         }
         L13_Craftris.points.clearCalc();
-        let dropped = control.dropFragment();
+        let dropped = controlActive.dropFragment();
         let combos = new L13_Craftris.Combos(dropped);
         callToAction("CREATE COMBOS OF 3 OR MORE!");
         let iCombo = await handleCombos(combos, 0);
@@ -251,12 +240,12 @@ var L13_Craftris;
             rotation: _transformation.rotation ? L13_Craftris.ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new L13_Craftris.ƒ.Vector3(),
             translation: _transformation.translation ? L13_Craftris.ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new L13_Craftris.ƒ.Vector3()
         };
-        if (control.checkCollisions(move).length > 0)
+        if (controlActive.checkCollisions(move).length > 0)
             return;
         move.translation.scale(1 / animationSteps);
         move.rotation.scale(1 / animationSteps);
         L13_Craftris.ƒ.Time.game.setTimer(20, animationSteps, function (_event) {
-            control.move(move);
+            controlActive.move(move);
             updateDisplay();
         });
     }

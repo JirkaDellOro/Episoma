@@ -34,13 +34,13 @@ namespace L13_Craftris {
       super();
     }
 
-    public push(_position: ƒ.Vector3, _element: GridElement = null): void {
+    public push(_position: ƒ.Vector3, _element: GridElement = null, _addToGame: boolean = false): void {
       let key: GridPosition = this.toKey(_position);
       if (this.pop(_position))
         ƒ.Debug.warn("Grid push to occupied position, popped: ", key);
       this.set(key, _element);
-      // if (_element)
-      //   game.appendChild(_element.cube);
+      if (_element && _addToGame)
+        game.appendChild(_element.cube);
     }
 
     public pull(_position: ƒ.Vector3): GridElement {

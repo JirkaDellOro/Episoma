@@ -14,7 +14,7 @@ namespace L13_Craftris {
   export let points: Points;
 
   let state: GAME_STATE = GAME_STATE.START;
-  let control: Control;
+  let controlActive: Control;
   let controls: Control[] = [];
   let viewport: ƒ.Viewport;
   let speedCameraRotation: number = 0.2;
@@ -65,7 +65,7 @@ namespace L13_Craftris {
 
     for (let control of controls)
       game.appendChild(control);
-    control = controls[0];
+    controlActive = controls[0];
 
     updateDisplay();
     ƒ.Debug.log("Game", game);
@@ -78,7 +78,7 @@ namespace L13_Craftris {
 
   async function start(): Promise<void> {
     setState(GAME_STATE.MENU);
-    grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())));
+    grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
     for (let i: number = 0; i < 4; i++)
       startRandomFragment();
     ƒ.Debug.log("Wait for space");
@@ -135,23 +135,10 @@ namespace L13_Craftris {
 
   //#region Interaction
   function handleClick(_event: MouseEvent): void {
-    // ƒ.Debug.log("Click");
-    // viewport.createPickBuffers();
-
     let mouse: ƒ.Vector2 = new ƒ.Vector2(_event.offsetX, _event.offsetY);
-    // ƒ.Debug.log(mouse.toString());
-    control.pickFragment(viewport, mouse);
-    // pickNodeAt(mouse);
-    // updateDisplay();
-
-    // function pickNodeAt(_pos: ƒ.Vector2): void {
-    //   let posRender: ƒ.Vector2 = viewport.pointClientToRender(
-    //     new ƒ.Vector2(_pos.x, viewport.getClientRectangle().height - _pos.y)
-    //   );
-    //   let hits: ƒ.RayHit[] = viewport.pickNodeAt(posRender);
-    //   for (let hit of hits)
-    //    ƒ.Debug.log(hit.node.name + ":" + hit.zBuffer);
-    // }
+    for (let control of controls)
+      if (control.pickFragment(viewport, mouse))
+        controlActive = control;
   }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
@@ -164,7 +151,7 @@ namespace L13_Craftris {
 
     // if (segmentAfter - segmentBefore) {
     if (!ƒ.Time.game.hasTimers())
-      control.rotateToSegment(camera.getSegmentY());
+      controlActive.rotateToSegment(camera.getSegmentY());
     // }
 
     updateDisplay();
@@ -217,13 +204,13 @@ namespace L13_Craftris {
   }
 
   async function dropFragment(): Promise<void> {
-    if (!control.isConnected()) {
+    if (!controlActive.isConnected()) {
       callToAction("CONNECT TO EXISTING CUBES!");
       return;
     }
     points.clearCalc();
 
-    let dropped: GridElement[] = control.dropFragment();
+    let dropped: GridElement[] = controlActive.dropFragment();
     let combos: Combos = new Combos(dropped);
 
     callToAction("CREATE COMBOS OF 3 OR MORE!");
@@ -285,14 +272,14 @@ namespace L13_Craftris {
       translation: _transformation.translation ? ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new ƒ.Vector3()
     };
 
-    if (control.checkCollisions(move).length > 0)
+    if (controlActive.checkCollisions(move).length > 0)
       return;
 
     move.translation.scale(1 / animationSteps);
     move.rotation.scale(1 / animationSteps);
 
     ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
-      control.move(move);
+      controlActive.move(move);
       updateDisplay();
     });
   }
