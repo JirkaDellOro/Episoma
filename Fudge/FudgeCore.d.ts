@@ -2570,6 +2570,7 @@ declare namespace FudgeCore {
      * @author Jirka Dell'Oro-Friedl, HFU, 2019
      */
     class Random {
+        static default: Random;
         private generate;
         /**
          * Create an instance of [[Random]]. If desired, creates a PRNG with it and feeds the given seed.
@@ -2605,6 +2606,10 @@ declare namespace FudgeCore {
          * Returns a randomly selected index into the given array
          */
         getIndex<T>(_array: Array<T>): number;
+        /**
+         * Returns a randomly selected index into the given array
+         */
+        splice<T>(_array: Array<T>): T;
         /**
          * Returns a randomly selected key from the given Map-instance
          */

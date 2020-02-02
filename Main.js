@@ -59,14 +59,11 @@ var Episoma;
     }
     async function start() {
         setState(GAME_STATE.MENU);
-        // grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
-        // setCenterFragment();
-        // for (let i: number = 0; i < 6; i++)
-        //   startRandomFragment();
         Episoma.body = new Episoma.Body(Episoma.bodyData["Cube"]);
         Episoma.ƒ.Debug.log("Wait for space");
         await waitForKeyPress(Episoma.ƒ.KEYBOARD_CODE.SPACE);
         Episoma.ƒ.Debug.log("Space pressed");
+        Episoma.body.explode();
         let domMenu = document.querySelector("div#Menu");
         domMenu.style.visibility = "hidden";
         window.addEventListener("keydown", hndKeyDown); // activate when user starts...
@@ -114,6 +111,8 @@ var Episoma;
     Episoma.updateDisplay = updateDisplay;
     //#region Interaction
     function handleClick(_event) {
+        if (Episoma.ƒ.Time.game.hasTimers())
+            return;
         let mouse = new Episoma.ƒ.Vector2(_event.offsetX, _event.offsetY);
         for (let control of Episoma.body.controls)
             if (control.pickFragment(viewport, mouse)) {
@@ -124,7 +123,7 @@ var Episoma;
         controlActive.rotateToSegment(Episoma.camera.getSegmentY());
     }
     function hndPointerMove(_event) {
-        if (!document.pointerLockElement)
+        if (!_event.buttons)
             return;
         Episoma.camera.rotateY(_event.movementX * speedCameraRotation);
         Episoma.camera.rotateX(_event.movementY * speedCameraRotation);
@@ -142,57 +141,10 @@ var Episoma;
         let code = (_event.shiftKey ? Episoma.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
         let transformation = Episoma.Control.transformations[code];
         if (transformation)
-            move(transformation);
+            controlActive.moveTo(transformation);
         updateDisplay();
     }
     //#endregion
-    //#region Start/Drop Fragments
-    // export function setCenterFragment(): void {
-    //   let fragment: Fragment = Fragment.getRandom();
-    //   let control: Control = new Control();
-    //   control.setFragment(fragment);
-    //   game.appendChild(control);
-    //   control.freezeFragment(true);
-    // }
-    // export function startRandomFragment(): void {
-    //   let fragment: Fragment = Fragment.getRandom();
-    //   let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
-    //   let control: Control = new Control();
-    //   control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
-    //   control.setFragment(fragment);
-    //   game.appendChild(control);
-    //   let start: Transformation;
-    //   try {
-    //     do {
-    //       let index: number = ƒ.random.getIndex(cardinals);
-    //       let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
-    //       start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
-    //     } while (control.checkCollisions(start).length > 0);
-    //   } catch (_error) {
-    //     callToAction("GAME OVER");
-    //   }
-    //   control.move(start);
-    //   control.freezeFragment();
-    //   controls.push(control);
-    // }
-    //#endregion
-    function move(_transformation) {
-        let animationSteps = 5;
-        let fullRotation = 90;
-        let fullTranslation = 1;
-        let move = {
-            rotation: _transformation.rotation ? Episoma.ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new Episoma.ƒ.Vector3(),
-            translation: _transformation.translation ? Episoma.ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new Episoma.ƒ.Vector3()
-        };
-        if (controlActive.checkCollisions(move).length > 0)
-            return;
-        move.translation.scale(1 / animationSteps);
-        move.rotation.scale(1 / animationSteps);
-        Episoma.ƒ.Time.game.setTimer(20, animationSteps, function (_event) {
-            controlActive.move(move);
-            updateDisplay();
-        });
-    }
     // function callToAction(_message: string): void {
     //   let span: HTMLElement = document.querySelector("span#CallToAction");
     //   span.textContent = _message;

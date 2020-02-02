@@ -75,6 +75,30 @@ namespace Episoma {
       mtxFragment.rotateY(-_angle, true);
     }
 
+    public moveTo(_transformation: Transformation, _animationSteps: number = 5, _checkCollision: boolean = true): void {
+      let move: Transformation = this.getFullTransformation(_transformation);
+      if (_checkCollision && this.checkCollisions(move).length > 0)
+        return;
+
+      move.translation.scale(1 / _animationSteps);
+      move.rotation.scale(1 / _animationSteps);
+
+      ƒ.Time.game.setTimer(20, _animationSteps, (_event: ƒ.EventTimer): void => {
+        this.move(move);
+        updateDisplay();
+      });
+    }
+
+    public getFullTransformation(_transformation: Transformation): Transformation {
+      let fullRotation: number = 90;
+      let fullTranslation: number = 1;
+      let result: Transformation = {
+        rotation: _transformation.rotation ? ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new ƒ.Vector3(),
+        translation: _transformation.translation ? ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new ƒ.Vector3()
+      };
+      return result;
+    }
+
     public rotateToSegment(_segment: number): void {
       // ƒ.Debug.log(_segment, this.segment);
       while (_segment != this.segment) {

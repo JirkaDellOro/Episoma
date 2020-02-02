@@ -53,6 +53,26 @@ var Episoma;
             mtxContainer.rotateY(_angle);
             mtxFragment.rotateY(-_angle, true);
         }
+        moveTo(_transformation, _animationSteps = 5, _checkCollision = true) {
+            let move = this.getFullTransformation(_transformation);
+            if (_checkCollision && this.checkCollisions(move).length > 0)
+                return;
+            move.translation.scale(1 / _animationSteps);
+            move.rotation.scale(1 / _animationSteps);
+            ƒ.Time.game.setTimer(20, _animationSteps, (_event) => {
+                this.move(move);
+                Episoma.updateDisplay();
+            });
+        }
+        getFullTransformation(_transformation) {
+            let fullRotation = 90;
+            let fullTranslation = 1;
+            let result = {
+                rotation: _transformation.rotation ? ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new ƒ.Vector3(),
+                translation: _transformation.translation ? ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new ƒ.Vector3()
+            };
+            return result;
+        }
         rotateToSegment(_segment) {
             // ƒ.Debug.log(_segment, this.segment);
             while (_segment != this.segment) {

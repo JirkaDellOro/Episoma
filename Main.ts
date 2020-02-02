@@ -58,9 +58,9 @@ namespace Episoma {
     viewport.addEventListener(ƒ.EVENT_WHEEL.WHEEL, hndWheelMove);
 
     start();
-    
+
     controlActive = body.controls[0];
-    
+
     updateDisplay();
     ƒ.Debug.log("Game", game);
   }
@@ -72,14 +72,13 @@ namespace Episoma {
 
   async function start(): Promise<void> {
     setState(GAME_STATE.MENU);
-    // grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
-    // setCenterFragment();
-    // for (let i: number = 0; i < 6; i++)
-    //   startRandomFragment();
     body = new Body(bodyData["Cube"]);
+
     ƒ.Debug.log("Wait for space");
     await waitForKeyPress(ƒ.KEYBOARD_CODE.SPACE);
     ƒ.Debug.log("Space pressed");
+    body.explode();
+
     let domMenu: HTMLElement = document.querySelector("div#Menu");
     domMenu.style.visibility = "hidden";
     window.addEventListener("keydown", hndKeyDown);  // activate when user starts...
@@ -131,6 +130,8 @@ namespace Episoma {
 
   //#region Interaction
   function handleClick(_event: MouseEvent): void {
+    if (ƒ.Time.game.hasTimers())
+      return;
     let mouse: ƒ.Vector2 = new ƒ.Vector2(_event.offsetX, _event.offsetY);
     for (let control of body.controls)
       if (control.pickFragment(viewport, mouse)) {
@@ -142,7 +143,7 @@ namespace Episoma {
   }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
-    if (!document.pointerLockElement)
+    if (!_event.buttons)
       return;
 
     camera.rotateY(_event.movementX * speedCameraRotation);
@@ -166,67 +167,12 @@ namespace Episoma {
     let code: string = (_event.shiftKey ? ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
     let transformation: Transformation = Control.transformations[code];
     if (transformation)
-      move(transformation);
+      controlActive.moveTo(transformation);
 
     updateDisplay();
   }
   //#endregion
 
-  //#region Start/Drop Fragments
-  // export function setCenterFragment(): void {
-  //   let fragment: Fragment = Fragment.getRandom();
-  //   let control: Control = new Control();
-  //   control.setFragment(fragment);
-  //   game.appendChild(control);
-  //   control.freezeFragment(true);
-  // }
-
-  // export function startRandomFragment(): void {
-  //   let fragment: Fragment = Fragment.getRandom();
-  //   let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
-  //   let control: Control = new Control();
-  //   control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
-  //   control.setFragment(fragment);
-  //   game.appendChild(control);
-
-  //   let start: Transformation;
-  //   try {
-  //     do {
-  //       let index: number = ƒ.random.getIndex(cardinals);
-  //       let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
-  //       start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
-  //     } while (control.checkCollisions(start).length > 0);
-  //   } catch (_error) {
-  //     callToAction("GAME OVER");
-  //   }
-
-  //   control.move(start);
-  //   control.freezeFragment();
-
-  //   controls.push(control);
-  // }
-  //#endregion
-
-  function move(_transformation: Transformation): void {
-    let animationSteps: number = 5;
-    let fullRotation: number = 90;
-    let fullTranslation: number = 1;
-    let move: Transformation = {
-      rotation: _transformation.rotation ? ƒ.Vector3.SCALE(_transformation.rotation, fullRotation) : new ƒ.Vector3(),
-      translation: _transformation.translation ? ƒ.Vector3.SCALE(_transformation.translation, fullTranslation) : new ƒ.Vector3()
-    };
-
-    if (controlActive.checkCollisions(move).length > 0)
-      return;
-
-    move.translation.scale(1 / animationSteps);
-    move.rotation.scale(1 / animationSteps);
-
-    ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
-      controlActive.move(move);
-      updateDisplay();
-    });
-  }
 
   // function callToAction(_message: string): void {
   //   let span: HTMLElement = document.querySelector("span#CallToAction");
