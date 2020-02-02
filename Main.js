@@ -14,7 +14,7 @@ var Episoma;
     Episoma.grid = new Episoma.Grid();
     let state = GAME_STATE.START;
     let controlActive;
-    let controls = [];
+    // let controls: Control[] = [];
     let viewport;
     let speedCameraRotation = 0.2;
     let speedCameraTranslation = 0.02;
@@ -49,7 +49,7 @@ var Episoma;
         viewport.addEventListener("\u0192pointermove" /* MOVE */, hndPointerMove);
         viewport.addEventListener("\u0192wheel" /* WHEEL */, hndWheelMove);
         start();
-        controlActive = controls[0];
+        controlActive = Episoma.body.controls[0];
         updateDisplay();
         Episoma.ƒ.Debug.log("Game", Episoma.game);
     }
@@ -60,9 +60,10 @@ var Episoma;
     async function start() {
         setState(GAME_STATE.MENU);
         // grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
-        setCenterFragment();
-        for (let i = 0; i < 4; i++)
-            startRandomFragment();
+        // setCenterFragment();
+        // for (let i: number = 0; i < 6; i++)
+        //   startRandomFragment();
+        Episoma.body = new Episoma.Body(Episoma.bodyData["Cube"]);
         Episoma.ƒ.Debug.log("Wait for space");
         await waitForKeyPress(Episoma.ƒ.KEYBOARD_CODE.SPACE);
         Episoma.ƒ.Debug.log("Space pressed");
@@ -114,7 +115,7 @@ var Episoma;
     //#region Interaction
     function handleClick(_event) {
         let mouse = new Episoma.ƒ.Vector2(_event.offsetX, _event.offsetY);
-        for (let control of controls)
+        for (let control of Episoma.body.controls)
             if (control.pickFragment(viewport, mouse)) {
                 controlActive.freezeFragment();
                 controlActive = control;
@@ -146,37 +147,34 @@ var Episoma;
     }
     //#endregion
     //#region Start/Drop Fragments
-    function setCenterFragment() {
-        let fragment = Episoma.Fragment.getRandom();
-        let control = new Episoma.Control();
-        control.setFragment(fragment);
-        Episoma.game.appendChild(control);
-        control.freezeFragment(true);
-    }
-    Episoma.setCenterFragment = setCenterFragment;
-    function startRandomFragment() {
-        let fragment = Episoma.Fragment.getRandom();
-        let cardinals = Array.from(Episoma.Grid.cardinals);
-        let control = new Episoma.Control();
-        control.cmpTransform.local.translation = Episoma.ƒ.Vector3.ZERO();
-        control.setFragment(fragment);
-        Episoma.game.appendChild(control);
-        let start;
-        try {
-            do {
-                let index = Episoma.ƒ.random.getIndex(cardinals);
-                let offset = cardinals.splice(index, 1)[0];
-                start = { translation: Episoma.ƒ.Vector3.SCALE(offset, 5), rotation: Episoma.ƒ.Vector3.ZERO() };
-            } while (control.checkCollisions(start).length > 0);
-        }
-        catch (_error) {
-            callToAction("GAME OVER");
-        }
-        control.move(start);
-        control.freezeFragment();
-        controls.push(control);
-    }
-    Episoma.startRandomFragment = startRandomFragment;
+    // export function setCenterFragment(): void {
+    //   let fragment: Fragment = Fragment.getRandom();
+    //   let control: Control = new Control();
+    //   control.setFragment(fragment);
+    //   game.appendChild(control);
+    //   control.freezeFragment(true);
+    // }
+    // export function startRandomFragment(): void {
+    //   let fragment: Fragment = Fragment.getRandom();
+    //   let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
+    //   let control: Control = new Control();
+    //   control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
+    //   control.setFragment(fragment);
+    //   game.appendChild(control);
+    //   let start: Transformation;
+    //   try {
+    //     do {
+    //       let index: number = ƒ.random.getIndex(cardinals);
+    //       let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
+    //       start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
+    //     } while (control.checkCollisions(start).length > 0);
+    //   } catch (_error) {
+    //     callToAction("GAME OVER");
+    //   }
+    //   control.move(start);
+    //   control.freezeFragment();
+    //   controls.push(control);
+    // }
     //#endregion
     function move(_transformation) {
         let animationSteps = 5;
@@ -195,12 +193,12 @@ var Episoma;
             updateDisplay();
         });
     }
-    function callToAction(_message) {
-        let span = document.querySelector("span#CallToAction");
-        span.textContent = _message;
-        span.style.animation = "none";
-        isNaN(span.offsetHeight); // stupid hack to restart css-animation, read offsetHeight
-        span.style.animation = null;
-    }
+    // function callToAction(_message: string): void {
+    //   let span: HTMLElement = document.querySelector("span#CallToAction");
+    //   span.textContent = _message;
+    //   span.style.animation = "none";
+    //   isNaN(span.offsetHeight); // stupid hack to restart css-animation, read offsetHeight
+    //   span.style.animation = null;
+    // }
 })(Episoma || (Episoma = {}));
 //# sourceMappingURL=Main.js.map

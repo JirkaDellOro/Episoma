@@ -12,10 +12,11 @@ namespace Episoma {
   export let args: URLSearchParams;
   export let camera: CameraOrbit;
   export let points: Points;
+  export let body: Body;
 
   let state: GAME_STATE = GAME_STATE.START;
   let controlActive: Control;
-  let controls: Control[] = [];
+  // let controls: Control[] = [];
   let viewport: ƒ.Viewport;
   let speedCameraRotation: number = 0.2;
   let speedCameraTranslation: number = 0.02;
@@ -58,7 +59,7 @@ namespace Episoma {
 
     start();
     
-    controlActive = controls[0];
+    controlActive = body.controls[0];
     
     updateDisplay();
     ƒ.Debug.log("Game", game);
@@ -72,9 +73,10 @@ namespace Episoma {
   async function start(): Promise<void> {
     setState(GAME_STATE.MENU);
     // grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
-    setCenterFragment();
-    for (let i: number = 0; i < 4; i++)
-      startRandomFragment();
+    // setCenterFragment();
+    // for (let i: number = 0; i < 6; i++)
+    //   startRandomFragment();
+    body = new Body(bodyData["Cube"]);
     ƒ.Debug.log("Wait for space");
     await waitForKeyPress(ƒ.KEYBOARD_CODE.SPACE);
     ƒ.Debug.log("Space pressed");
@@ -130,7 +132,7 @@ namespace Episoma {
   //#region Interaction
   function handleClick(_event: MouseEvent): void {
     let mouse: ƒ.Vector2 = new ƒ.Vector2(_event.offsetX, _event.offsetY);
-    for (let control of controls)
+    for (let control of body.controls)
       if (control.pickFragment(viewport, mouse)) {
         controlActive.freezeFragment();
         controlActive = control;
@@ -171,38 +173,38 @@ namespace Episoma {
   //#endregion
 
   //#region Start/Drop Fragments
-  export function setCenterFragment(): void {
-    let fragment: Fragment = Fragment.getRandom();
-    let control: Control = new Control();
-    control.setFragment(fragment);
-    game.appendChild(control);
-    control.freezeFragment(true);
-  }
+  // export function setCenterFragment(): void {
+  //   let fragment: Fragment = Fragment.getRandom();
+  //   let control: Control = new Control();
+  //   control.setFragment(fragment);
+  //   game.appendChild(control);
+  //   control.freezeFragment(true);
+  // }
 
-  export function startRandomFragment(): void {
-    let fragment: Fragment = Fragment.getRandom();
-    let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
-    let control: Control = new Control();
-    control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
-    control.setFragment(fragment);
-    game.appendChild(control);
+  // export function startRandomFragment(): void {
+  //   let fragment: Fragment = Fragment.getRandom();
+  //   let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
+  //   let control: Control = new Control();
+  //   control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
+  //   control.setFragment(fragment);
+  //   game.appendChild(control);
 
-    let start: Transformation;
-    try {
-      do {
-        let index: number = ƒ.random.getIndex(cardinals);
-        let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
-        start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
-      } while (control.checkCollisions(start).length > 0);
-    } catch (_error) {
-      callToAction("GAME OVER");
-    }
+  //   let start: Transformation;
+  //   try {
+  //     do {
+  //       let index: number = ƒ.random.getIndex(cardinals);
+  //       let offset: ƒ.Vector3 = cardinals.splice(index, 1)[0];
+  //       start = { translation: ƒ.Vector3.SCALE(offset, 5), rotation: ƒ.Vector3.ZERO() };
+  //     } while (control.checkCollisions(start).length > 0);
+  //   } catch (_error) {
+  //     callToAction("GAME OVER");
+  //   }
 
-    control.move(start);
-    control.freezeFragment();
+  //   control.move(start);
+  //   control.freezeFragment();
 
-    controls.push(control);
-  }
+  //   controls.push(control);
+  // }
   //#endregion
 
   function move(_transformation: Transformation): void {
@@ -226,11 +228,11 @@ namespace Episoma {
     });
   }
 
-  function callToAction(_message: string): void {
-    let span: HTMLElement = document.querySelector("span#CallToAction");
-    span.textContent = _message;
-    span.style.animation = "none";
-    isNaN(span.offsetHeight); // stupid hack to restart css-animation, read offsetHeight
-    span.style.animation = null;
-  }
+  // function callToAction(_message: string): void {
+  //   let span: HTMLElement = document.querySelector("span#CallToAction");
+  //   span.textContent = _message;
+  //   span.style.animation = "none";
+  //   isNaN(span.offsetHeight); // stupid hack to restart css-animation, read offsetHeight
+  //   span.style.animation = null;
+  // }
 }

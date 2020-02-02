@@ -35,7 +35,7 @@ namespace Episoma {
       { type: CUBE_TYPE.BLACK, positions: [[0, 0, 0]] }
     ];
     setupGrid(setups);
-    startRandomFragment();
+    // startRandomFragment();
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, rotateY);
     ƒ.Loop.start();
     // ƒ.Time.game.setTimer(4, 0, rotateY);

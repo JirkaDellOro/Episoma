@@ -44,7 +44,7 @@ var Episoma;
             { type: Episoma.CUBE_TYPE.BLACK, positions: [[0, 0, 0]] }
         ];
         setupGrid(setups);
-        Episoma.startRandomFragment();
+        // startRandomFragment();
         Episoma.ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, rotateY);
         Episoma.ƒ.Loop.start();
         // ƒ.Time.game.setTimer(4, 0, rotateY);
