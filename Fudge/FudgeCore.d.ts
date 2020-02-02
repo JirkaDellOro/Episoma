@@ -1116,6 +1116,7 @@ declare namespace FudgeCore {
         set audio(_audio: Audio);
         get audio(): Audio;
         play(_on: boolean): void;
+        reset(): void;
         get isPlaying(): boolean;
         get isConnected(): boolean;
         get isAttached(): boolean;

@@ -22,6 +22,10 @@ namespace Episoma {
   let speedCameraRotation: number = 0.2;
   let speedCameraTranslation: number = 0.02;
 
+  let cmpAudioStart: ƒ.ComponentAudio;
+  let cmpAudioPlay: ƒ.ComponentAudio;
+  let cmpAudioCrash: ƒ.ComponentAudio;
+
   async function hndLoad(_event: Event): Promise<void> {
     document.removeEventListener("click", hndLoad);
     const canvas: HTMLCanvasElement = document.querySelector("canvas");
@@ -37,10 +41,12 @@ namespace Episoma {
     // prepare music and sounds
     let audioStart: ƒ.Audio = await ƒ.Audio.load("Sound/Start.mp3");
     let audioPlay: ƒ.Audio = await ƒ.Audio.load("Sound/Play.mp3");
-    let cmpAudioStart: ƒ.ComponentAudio = new ƒ.ComponentAudio(audioStart, true, true);
-    let cmpAudioPlay: ƒ.ComponentAudio = new ƒ.ComponentAudio(audioPlay, true, false);
+    cmpAudioStart = new ƒ.ComponentAudio(audioStart, true, true);
+    cmpAudioPlay = new ƒ.ComponentAudio(audioPlay, true, false);
+    cmpAudioCrash = new ƒ.ComponentAudio(await ƒ.Audio.load("Sound/Crash.mp3"), false, false);
     game.addComponent(cmpAudioStart);
     game.addComponent(cmpAudioPlay);
+    game.addComponent(cmpAudioCrash);
     ƒ.AudioManager.default.listenTo(game);
 
     // set lights
@@ -89,6 +95,10 @@ namespace Episoma {
     await waitForKeyPress(ƒ.KEYBOARD_CODE.SPACE);
     ƒ.Debug.log("Space pressed");
     body.explode();
+
+    cmpAudioPlay.play(true);
+    cmpAudioCrash.play(true);
+    cmpAudioStart.activate(false);
 
     let domMenu: HTMLElement = document.querySelector("div#Menu");
     domMenu.style.visibility = "hidden";

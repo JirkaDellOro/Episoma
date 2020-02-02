@@ -19,6 +19,9 @@ var Episoma;
     let viewport;
     let speedCameraRotation = 0.2;
     let speedCameraTranslation = 0.02;
+    let cmpAudioStart;
+    let cmpAudioPlay;
+    let cmpAudioCrash;
     async function hndLoad(_event) {
         document.removeEventListener("click", hndLoad);
         const canvas = document.querySelector("canvas");
@@ -32,10 +35,12 @@ var Episoma;
         // prepare music and sounds
         let audioStart = await Episoma.ƒ.Audio.load("Sound/Start.mp3");
         let audioPlay = await Episoma.ƒ.Audio.load("Sound/Play.mp3");
-        let cmpAudioStart = new Episoma.ƒ.ComponentAudio(audioStart, true, true);
-        let cmpAudioPlay = new Episoma.ƒ.ComponentAudio(audioPlay, true, false);
+        cmpAudioStart = new Episoma.ƒ.ComponentAudio(audioStart, true, true);
+        cmpAudioPlay = new Episoma.ƒ.ComponentAudio(audioPlay, true, false);
+        cmpAudioCrash = new Episoma.ƒ.ComponentAudio(await Episoma.ƒ.Audio.load("Sound/Crash.mp3"), false, false);
         Episoma.game.addComponent(cmpAudioStart);
         Episoma.game.addComponent(cmpAudioPlay);
+        Episoma.game.addComponent(cmpAudioCrash);
         Episoma.ƒ.AudioManager.default.listenTo(Episoma.game);
         // set lights
         let cmpLight = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightDirectional(Episoma.ƒ.Color.CSS("WHITE")));
@@ -74,6 +79,9 @@ var Episoma;
         await waitForKeyPress(Episoma.ƒ.KEYBOARD_CODE.SPACE);
         Episoma.ƒ.Debug.log("Space pressed");
         Episoma.body.explode();
+        cmpAudioPlay.play(true);
+        cmpAudioCrash.play(true);
+        cmpAudioStart.activate(false);
         let domMenu = document.querySelector("div#Menu");
         domMenu.style.visibility = "hidden";
         window.addEventListener("keydown", hndKeyDown); // activate when user starts...
