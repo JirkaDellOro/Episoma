@@ -5,7 +5,8 @@ namespace Episoma {
     START, MENU, PLAY, OVER
   }
 
-  window.addEventListener("load", hndLoad);
+  // window.addEventListener("load", hndLoad);
+  document.addEventListener("click", hndLoad);
 
   export let game: ƒ.Node = new ƒ.Node("FudgeCraft");
   export let grid: Grid = new Grid();
@@ -21,7 +22,8 @@ namespace Episoma {
   let speedCameraRotation: number = 0.2;
   let speedCameraTranslation: number = 0.02;
 
-  function hndLoad(_event: Event): void {
+  async function hndLoad(_event: Event): Promise<void> {
+    document.removeEventListener("click", hndLoad);
     const canvas: HTMLCanvasElement = document.querySelector("canvas");
     args = new URLSearchParams(location.search);
     ƒ.RenderManager.initialize(true, true);
@@ -31,6 +33,15 @@ namespace Episoma {
     canvas.addEventListener("mousedown", canvas.requestPointerLock);
     canvas.addEventListener("mouseup", () => document.exitPointerLock());
     canvas.addEventListener("click", handleClick);
+
+    // prepare music and sounds
+    let audioStart: ƒ.Audio = await ƒ.Audio.load("Sound/Start.mp3");
+    let audioPlay: ƒ.Audio = await ƒ.Audio.load("Sound/Play.mp3");
+    let cmpAudioStart: ƒ.ComponentAudio = new ƒ.ComponentAudio(audioStart, true, true);
+    let cmpAudioPlay: ƒ.ComponentAudio = new ƒ.ComponentAudio(audioPlay, true, false);
+    game.addComponent(cmpAudioStart);
+    game.addComponent(cmpAudioPlay);
+    ƒ.AudioManager.default.listenTo(game);
 
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));

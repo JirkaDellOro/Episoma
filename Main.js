@@ -9,7 +9,8 @@ var Episoma;
         GAME_STATE[GAME_STATE["PLAY"] = 2] = "PLAY";
         GAME_STATE[GAME_STATE["OVER"] = 3] = "OVER";
     })(GAME_STATE || (GAME_STATE = {}));
-    window.addEventListener("load", hndLoad);
+    // window.addEventListener("load", hndLoad);
+    document.addEventListener("click", hndLoad);
     Episoma.game = new Episoma.ƒ.Node("FudgeCraft");
     Episoma.grid = new Episoma.Grid();
     let state = GAME_STATE.START;
@@ -18,7 +19,8 @@ var Episoma;
     let viewport;
     let speedCameraRotation = 0.2;
     let speedCameraTranslation = 0.02;
-    function hndLoad(_event) {
+    async function hndLoad(_event) {
+        document.removeEventListener("click", hndLoad);
         const canvas = document.querySelector("canvas");
         Episoma.args = new URLSearchParams(location.search);
         Episoma.ƒ.RenderManager.initialize(true, true);
@@ -27,6 +29,14 @@ var Episoma;
         canvas.addEventListener("mousedown", canvas.requestPointerLock);
         canvas.addEventListener("mouseup", () => document.exitPointerLock());
         canvas.addEventListener("click", handleClick);
+        // prepare music and sounds
+        let audioStart = await Episoma.ƒ.Audio.load("Sound/Start.mp3");
+        let audioPlay = await Episoma.ƒ.Audio.load("Sound/Play.mp3");
+        let cmpAudioStart = new Episoma.ƒ.ComponentAudio(audioStart, true, true);
+        let cmpAudioPlay = new Episoma.ƒ.ComponentAudio(audioPlay, true, false);
+        Episoma.game.addComponent(cmpAudioStart);
+        Episoma.game.addComponent(cmpAudioPlay);
+        Episoma.ƒ.AudioManager.default.listenTo(Episoma.game);
         // set lights
         let cmpLight = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightDirectional(Episoma.ƒ.Color.CSS("WHITE")));
         cmpLight.pivot.lookAt(new Episoma.ƒ.Vector3(0.5, 1, 0.8));
