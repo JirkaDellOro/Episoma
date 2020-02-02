@@ -11,7 +11,7 @@ namespace Episoma {
   export let grid: Grid = new Grid();
   export let args: URLSearchParams;
   export let camera: CameraOrbit;
-  export let points: Points;
+  // export let points: Points;
   export let body: Body;
 
   let state: GAME_STATE = GAME_STATE.START;
@@ -49,7 +49,7 @@ namespace Episoma {
     viewport = new ƒ.Viewport();
     viewport.initialize("Viewport", game, camera.cmpCamera, canvas);
     ƒ.Debug.log("Viewport", viewport);
-    points = new Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
+    // points = new Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
 
     // setup event handling
     viewport.activatePointerEvent(ƒ.EVENT_POINTER.MOVE, true);

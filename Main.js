@@ -42,7 +42,7 @@ var Episoma;
         viewport = new Episoma.ƒ.Viewport();
         viewport.initialize("Viewport", Episoma.game, Episoma.camera.cmpCamera, canvas);
         Episoma.ƒ.Debug.log("Viewport", viewport);
-        Episoma.points = new Episoma.Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
+        // points = new Points(viewport, document.querySelector("#Score"), document.querySelector("div#Calculation"));
         // setup event handling
         viewport.activatePointerEvent("\u0192pointermove" /* MOVE */, true);
         viewport.activateWheelEvent("\u0192wheel" /* WHEEL */, true);
