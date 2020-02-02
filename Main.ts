@@ -56,15 +56,10 @@ namespace Episoma {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     viewport.addEventListener(ƒ.EVENT_WHEEL.WHEEL, hndWheelMove);
 
-    if (args.get("test"))
-      startTests();
-    else
-      start();
-
-    for (let control of controls)
-      game.appendChild(control);
+    start();
+    
     controlActive = controls[0];
-
+    
     updateDisplay();
     ƒ.Debug.log("Game", game);
   }
@@ -76,7 +71,8 @@ namespace Episoma {
 
   async function start(): Promise<void> {
     setState(GAME_STATE.MENU);
-    grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
+    // grid.push(ƒ.Vector3.ZERO(), new GridElement(new Cube(CUBE_TYPE.BLACK, ƒ.Vector3.ZERO())), true);
+    setCenterFragment();
     for (let i: number = 0; i < 4; i++)
       startRandomFragment();
     ƒ.Debug.log("Wait for space");
@@ -146,10 +142,10 @@ namespace Episoma {
   function hndPointerMove(_event: ƒ.EventPointer): void {
     if (!document.pointerLockElement)
       return;
-      
+
     camera.rotateY(_event.movementX * speedCameraRotation);
     camera.rotateX(_event.movementY * speedCameraRotation);
-    
+
     if (!ƒ.Time.game.hasTimers())
       controlActive.rotateToSegment(camera.getSegmentY());
 
@@ -175,13 +171,22 @@ namespace Episoma {
   //#endregion
 
   //#region Start/Drop Fragments
+  export function setCenterFragment(): void {
+    let fragment: Fragment = Fragment.getRandom();
+    let control: Control = new Control();
+    control.setFragment(fragment);
+    game.appendChild(control);
+    control.freezeFragment(true);
+  }
+
   export function startRandomFragment(): void {
     let fragment: Fragment = Fragment.getRandom();
     let cardinals: ƒ.Vector3[] = Array.from(Grid.cardinals);
     let control: Control = new Control();
     control.cmpTransform.local.translation = ƒ.Vector3.ZERO();
     control.setFragment(fragment);
-    updateDisplay();
+    game.appendChild(control);
+
     let start: Transformation;
     try {
       do {
@@ -192,32 +197,12 @@ namespace Episoma {
     } catch (_error) {
       callToAction("GAME OVER");
     }
+
     control.move(start);
-    updateDisplay();
+    control.freezeFragment();
+
     controls.push(control);
   }
-
-  // async function drop(): Promise<void> {
-    // if (!controlActive.isConnected()) {
-    //   callToAction("CONNECT TO EXISTING CUBES!");
-    //   return;
-    // }
-    // points.clearCalc();
-    // controlActive.freezeFragment();
-    // let combos: Combos = new Combos(dropped);
-
-    // callToAction("CREATE COMBOS OF 3 OR MORE!");
-    // let iCombo: number = await handleCombos(combos, 0);
-    // if (iCombo > 0) {
-    //   compressAndHandleCombos(iCombo);
-    //   if (ƒ.random.getBoolean())
-    //     callToAction("MULTIPLE COMBOS SCORE HIGHER!");
-    //   else
-    //     callToAction("LARGER COMBOS SCORE HIGHER!");
-    // }
-    // startRandomFragment();
-    // updateDisplay();
-  // }
   //#endregion
 
   function move(_transformation: Transformation): void {

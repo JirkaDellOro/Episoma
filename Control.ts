@@ -27,18 +27,18 @@ namespace Episoma {
 
     public static defineControls(): Transformations {
       let controls: Transformations = {};
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.W] = { rotation: ƒ.Vector3.Z(-1) };
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.S] = { rotation: ƒ.Vector3.Z(1) };
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.A] = { rotation: ƒ.Vector3.X(1) };
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.D] = { rotation: ƒ.Vector3.X(-1) };
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.Q] = { rotation: ƒ.Vector3.Y(1) };
-      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.E] = { rotation: ƒ.Vector3.Y(-1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.W] = { rotation: ƒ.Vector3.X(-1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.S] = { rotation: ƒ.Vector3.X(1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.A] = { rotation: ƒ.Vector3.Y(-1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.D] = { rotation: ƒ.Vector3.Y(1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.Q] = { rotation: ƒ.Vector3.Z(1) };
+      controls[ƒ.KEYBOARD_CODE.SHIFT_LEFT + ƒ.KEYBOARD_CODE.E] = { rotation: ƒ.Vector3.Z(-1) };
       controls[ƒ.KEYBOARD_CODE.W] = { translation: ƒ.Vector3.Z(-1) };
       controls[ƒ.KEYBOARD_CODE.S] = { translation: ƒ.Vector3.Z(1) };
       controls[ƒ.KEYBOARD_CODE.A] = { translation: ƒ.Vector3.X(-1) };
       controls[ƒ.KEYBOARD_CODE.D] = { translation: ƒ.Vector3.X(1) };
-      controls[ƒ.KEYBOARD_CODE.Q] = { translation: ƒ.Vector3.Y(1) };
-      controls[ƒ.KEYBOARD_CODE.E] = { translation: ƒ.Vector3.Y(-1) };
+      controls[ƒ.KEYBOARD_CODE.E] = { translation: ƒ.Vector3.Y(1) };
+      controls[ƒ.KEYBOARD_CODE.X] = { translation: ƒ.Vector3.Y(-1) };
       return controls;
     }
 
@@ -105,11 +105,12 @@ namespace Episoma {
       return collisions;
     }
 
-    public freezeFragment(): void {
+    public freezeFragment(_moveToGrid: boolean = false): void {
+      updateDisplay();
       for (let cube of this.fragment.getChildren()) {
         let position: ƒ.Vector3 = cube.mtxWorld.translation;
         let element: GridElement = new GridElement(<Cube>cube);
-        grid.push(position, element);
+        grid.push(position, element, _moveToGrid);
       }
     }
 
