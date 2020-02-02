@@ -77,18 +77,18 @@ var Episoma;
             mtxFragment.mutate(save[1]);
             return collisions;
         }
-        dropFragment() {
-            let frozen = [];
+        freezeFragment() {
             for (let cube of this.fragment.getChildren()) {
                 let position = cube.mtxWorld.translation;
-                cube.cmpTransform.local.translation = position;
                 let element = new Episoma.GridElement(cube);
                 Episoma.grid.push(position, element);
-                frozen.push(element);
             }
-            for (let child of this.getChildren())
-                this.removeChild(child);
-            return frozen;
+        }
+        unfreezeFragment() {
+            for (let cube of this.fragment.getChildren()) {
+                let position = cube.mtxWorld.translation;
+                Episoma.grid.pop(position);
+            }
         }
         isConnected() {
             let neighbors = [];

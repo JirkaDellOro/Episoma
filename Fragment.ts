@@ -8,11 +8,11 @@ namespace Episoma {
     constructor(_shape: number, _position: ƒ.Vector3 = ƒ.Vector3.ZERO()) {
       super("Fragment-Type" + _shape);
       let shape: number[][] = Fragment.shapes[_shape];
+      let type: CUBE_TYPE;
+      do {
+        type = Fragment.getRandomEnum(CUBE_TYPE);
+      } while (type == CUBE_TYPE.BLACK);
       for (let position of shape) {
-        let type: CUBE_TYPE;
-        do {
-          type = Fragment.getRandomEnum(CUBE_TYPE);
-        } while (type == CUBE_TYPE.BLACK);
         let vctPosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
         vctPosition.set(position[0], position[1], position[2]);
         let cube: Cube = new Cube(type, vctPosition);
@@ -32,10 +32,18 @@ namespace Episoma {
       return [
         // corner
         [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]],
-        // quad
-        [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]],
+        // L_small
+        [[0, 0, 0], [1, 0, 0], [0, 1, 0]],
         // s
-        [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, -1, 0]]
+        [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, -1, 0]],
+        // L_long
+        [[0, 0, 0], [0, 1, 0], [0, 2, 0], [1, 0, 0]],
+        // T
+        [[0, 0, 0], [0, 1, 0], [-1, 0, 0], [1, 0, 0]],
+        // crook_left
+        [[0, 0, 0], [0, 1, 0], [0, 0, -1], [-1, 0, -1]],
+        // crook_right
+        [[0, 0, 0], [0, 1, 0], [0, 0, -1], [1, 0, -1]]
       ];
     }
 

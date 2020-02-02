@@ -105,18 +105,19 @@ namespace Episoma {
       return collisions;
     }
 
-    public dropFragment(): GridElement[] {
-      let frozen: GridElement[] = [];
+    public freezeFragment(): void {
       for (let cube of this.fragment.getChildren()) {
         let position: ƒ.Vector3 = cube.mtxWorld.translation;
-        cube.cmpTransform.local.translation = position;
         let element: GridElement = new GridElement(<Cube>cube);
         grid.push(position, element);
-        frozen.push(element);
       }
-      for (let child of this.getChildren())
-        this.removeChild(child);
-      return frozen;
+    }
+
+    public unfreezeFragment(): void {
+      for (let cube of this.fragment.getChildren()) {
+        let position: ƒ.Vector3 = cube.mtxWorld.translation;
+        grid.pop(position);
+      }
     }
 
     public isConnected(): boolean {

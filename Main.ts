@@ -56,8 +56,6 @@ namespace Episoma {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     viewport.addEventListener(ƒ.EVENT_WHEEL.WHEEL, hndWheelMove);
 
-
-
     if (args.get("test"))
       startTests();
     else
@@ -137,23 +135,23 @@ namespace Episoma {
   function handleClick(_event: MouseEvent): void {
     let mouse: ƒ.Vector2 = new ƒ.Vector2(_event.offsetX, _event.offsetY);
     for (let control of controls)
-      if (control.pickFragment(viewport, mouse))
+      if (control.pickFragment(viewport, mouse)) {
+        controlActive.freezeFragment();
         controlActive = control;
+        controlActive.unfreezeFragment();
+      }
     controlActive.rotateToSegment(camera.getSegmentY());
   }
 
   function hndPointerMove(_event: ƒ.EventPointer): void {
     if (!document.pointerLockElement)
       return;
-    // let segmentBefore: number = camera.getSegmentY();
+      
     camera.rotateY(_event.movementX * speedCameraRotation);
     camera.rotateX(_event.movementY * speedCameraRotation);
-    // let segmentAfter: number = camera.getSegmentY();
-
-    // if (segmentAfter - segmentBefore) {
+    
     if (!ƒ.Time.game.hasTimers())
       controlActive.rotateToSegment(camera.getSegmentY());
-    // }
 
     updateDisplay();
   }
@@ -167,10 +165,6 @@ namespace Episoma {
     if (ƒ.Time.game.hasTimers())
       return;
 
-    if (_event.code == ƒ.KEYBOARD_CODE.SPACE) {
-      dropFragment();
-    }
-
     let code: string = (_event.shiftKey ? ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
     let transformation: Transformation = Control.transformations[code];
     if (transformation)
@@ -178,7 +172,6 @@ namespace Episoma {
 
     updateDisplay();
   }
-
   //#endregion
 
   //#region Start/Drop Fragments
@@ -204,14 +197,13 @@ namespace Episoma {
     controls.push(control);
   }
 
-  async function dropFragment(): Promise<void> {
+  // async function drop(): Promise<void> {
     // if (!controlActive.isConnected()) {
     //   callToAction("CONNECT TO EXISTING CUBES!");
     //   return;
     // }
     // points.clearCalc();
-
-    // let dropped: GridElement[] = controlActive.dropFragment();
+    // controlActive.freezeFragment();
     // let combos: Combos = new Combos(dropped);
 
     // callToAction("CREATE COMBOS OF 3 OR MORE!");
@@ -224,45 +216,9 @@ namespace Episoma {
     //     callToAction("LARGER COMBOS SCORE HIGHER!");
     // }
     // startRandomFragment();
-    updateDisplay();
-  }
+    // updateDisplay();
+  // }
   //#endregion
-
-  //#region Combos & Compression
-  // export async function compressAndHandleCombos(_iCombo: number): Promise<void> {
-  //   let moves: Move[];
-  //   let iCombo: number = _iCombo;
-  //   do {
-  //     moves = compress();
-  //     await ƒ.Time.game.delay(400);
-
-  //     let moved: GridElement[] = moves.map(_move => _move.element);
-  //     let combos: Combos = new Combos(moved);
-  //     let iCounted: number = await handleCombos(combos, iCombo);
-  //     iCombo += iCounted;
-  //   } while (moves.length > 0);
-  // }
-
-  // export async function handleCombos(_combos: Combos, _iCombo: number): Promise<number> {
-  //   let iCombo: number = 0;
-  //   for (let combo of _combos.found)
-  //     if (combo.length > 2) {
-  //       iCombo++;
-  //       points.showCombo(combo, _iCombo + iCombo);
-  //       for (let shrink: number = Math.PI - Math.asin(0.9); shrink >= 0; shrink -= 0.2) {
-  //         for (let element of combo) {
-  //           let mtxLocal: ƒ.Matrix4x4 = element.cube.cmpTransform.local;
-  //           mtxLocal.scaling = ƒ.Vector3.ONE(Math.sin(shrink) * 1.2);
-  //         }
-  //         updateDisplay();
-  //         await ƒ.Time.game.delay(20);
-  //       }
-  //       for (let element of combo)
-  //         grid.pop(element.position);
-  //     }
-  //   updateDisplay();
-  //   return iCombo;
-  // }
 
   function move(_transformation: Transformation): void {
     let animationSteps: number = 5;
@@ -284,31 +240,6 @@ namespace Episoma {
       updateDisplay();
     });
   }
-
-  // export function compress(): Move[] {
-  //   let moves: Move[] = grid.compress();
-
-  //   for (let move of moves) {
-  //     grid.pop(move.element.position);
-  //     grid.push(move.target, move.element);
-  //   }
-
-  //   let animationSteps: number = 5;
-  //   ƒ.Time.game.setTimer(20, animationSteps, function (_event: ƒ.EventTimer): void {
-  //     for (let move of moves) {
-  //       let translation: ƒ.Vector3 = ƒ.Vector3.DIFFERENCE(move.target, move.element.position);
-  //       translation.normalize(1 / animationSteps);
-  //       move.element.position = ƒ.Vector3.SUM(move.element.position, translation);
-  //       if (_event.lastCall)
-  //         move.element.position = move.target;
-
-  //     }
-  //     updateDisplay();
-  //   });
-
-  //   return moves;
-  // }
-  //#endregion
 
   function callToAction(_message: string): void {
     let span: HTMLElement = document.querySelector("span#CallToAction");
