@@ -55,10 +55,13 @@ var Episoma;
         }
         moveTo(_transformation, _animationSteps = 5, _checkCollision = true) {
             let move = this.getFullTransformation(_transformation);
-            if (_checkCollision && this.checkCollisions(move).length > 0)
+            if (_checkCollision && this.checkCollisions(move).length > 0) {
+                Episoma.Audio.play(Episoma.AUDIO.HIT);
                 return;
+            }
             move.translation.scale(1 / _animationSteps);
             move.rotation.scale(1 / _animationSteps);
+            Episoma.Audio.play(_transformation.rotation ? Episoma.AUDIO.ROTATE : Episoma.AUDIO.MOVE);
             ƒ.Time.game.setTimer(20, _animationSteps, (_event) => {
                 this.move(move);
                 Episoma.updateDisplay();

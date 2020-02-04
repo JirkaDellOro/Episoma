@@ -22,9 +22,6 @@ namespace Episoma {
   let speedCameraRotation: number = 0.2;
   let speedCameraTranslation: number = 0.02;
 
-  let cmpAudioStart: ƒ.ComponentAudio;
-  let cmpAudioPlay: ƒ.ComponentAudio;
-  let cmpAudioCrash: ƒ.ComponentAudio;
 
   async function hndLoad(_event: Event): Promise<void> {
     document.removeEventListener("click", hndLoad);
@@ -33,21 +30,12 @@ namespace Episoma {
     ƒ.RenderManager.initialize(true, true);
     ƒ.Debug.log("Canvas", canvas);
 
+    Audio.start();
+
     // enable unlimited mouse-movement (user needs to click on canvas first)
     canvas.addEventListener("mousedown", canvas.requestPointerLock);
     canvas.addEventListener("mouseup", () => document.exitPointerLock());
     canvas.addEventListener("click", handleClick);
-
-    // prepare music and sounds
-    let audioStart: ƒ.Audio = await ƒ.Audio.load("Sound/Start.mp3");
-    let audioPlay: ƒ.Audio = await ƒ.Audio.load("Sound/Play.mp3");
-    cmpAudioStart = new ƒ.ComponentAudio(audioStart, true, true);
-    cmpAudioPlay = new ƒ.ComponentAudio(audioPlay, true, false);
-    cmpAudioCrash = new ƒ.ComponentAudio(await ƒ.Audio.load("Sound/Crash.mp3"), false, false);
-    game.addComponent(cmpAudioStart);
-    game.addComponent(cmpAudioPlay);
-    game.addComponent(cmpAudioCrash);
-    ƒ.AudioManager.default.listenTo(game);
 
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));
@@ -96,9 +84,9 @@ namespace Episoma {
     ƒ.Debug.log("Space pressed");
     body.explode();
 
-    cmpAudioPlay.play(true);
-    cmpAudioCrash.play(true);
-    cmpAudioStart.activate(false);
+    Audio.play(AUDIO.START, false);
+    Audio.play(AUDIO.PLAY);
+    Audio.play(AUDIO.CRASH);
 
     let domMenu: HTMLElement = document.querySelector("div#Menu");
     domMenu.style.visibility = "hidden";
@@ -187,9 +175,10 @@ namespace Episoma {
 
     let code: string = (_event.shiftKey ? ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
     let transformation: Transformation = Control.transformations[code];
-    if (transformation)
-      controlActive.moveTo(transformation);
+    if (!transformation)
+      return;
 
+    controlActive.moveTo(transformation);
     updateDisplay();
   }
   //#endregion

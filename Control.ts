@@ -77,11 +77,15 @@ namespace Episoma {
 
     public moveTo(_transformation: Transformation, _animationSteps: number = 5, _checkCollision: boolean = true): void {
       let move: Transformation = this.getFullTransformation(_transformation);
-      if (_checkCollision && this.checkCollisions(move).length > 0)
+      if (_checkCollision && this.checkCollisions(move).length > 0) {
+        Audio.play(AUDIO.HIT);
         return;
+      }
 
       move.translation.scale(1 / _animationSteps);
       move.rotation.scale(1 / _animationSteps);
+
+      Audio.play(_transformation.rotation ? AUDIO.ROTATE : AUDIO.MOVE);
 
       ƒ.Time.game.setTimer(20, _animationSteps, (_event: ƒ.EventTimer): void => {
         this.move(move);

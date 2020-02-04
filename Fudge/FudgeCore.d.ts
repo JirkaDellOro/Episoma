@@ -1116,7 +1116,6 @@ declare namespace FudgeCore {
         set audio(_audio: Audio);
         get audio(): Audio;
         play(_on: boolean): void;
-        reset(): void;
         get isPlaying(): boolean;
         get isConnected(): boolean;
         get isAttached(): boolean;
@@ -1126,6 +1125,8 @@ declare namespace FudgeCore {
          */
         activate(_on: boolean): void;
         install(_audioManager?: AudioManager): void;
+        createSource(_audio: Audio, _loop: boolean): void;
+        connect(_on: boolean): void;
         private updateConnection;
         /**
          * Automatically connects/disconnects AudioNodes when adding/removing this component to/from a node.
@@ -2608,7 +2609,7 @@ declare namespace FudgeCore {
          */
         getIndex<T>(_array: Array<T>): number;
         /**
-         * Returns a randomly selected index into the given array
+         * Returns removes a randomly selected element from the given array and returns it
          */
         splice<T>(_array: Array<T>): T;
         /**

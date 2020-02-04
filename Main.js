@@ -19,29 +19,17 @@ var Episoma;
     let viewport;
     let speedCameraRotation = 0.2;
     let speedCameraTranslation = 0.02;
-    let cmpAudioStart;
-    let cmpAudioPlay;
-    let cmpAudioCrash;
     async function hndLoad(_event) {
         document.removeEventListener("click", hndLoad);
         const canvas = document.querySelector("canvas");
         Episoma.args = new URLSearchParams(location.search);
         Episoma.ƒ.RenderManager.initialize(true, true);
         Episoma.ƒ.Debug.log("Canvas", canvas);
+        Episoma.Audio.start();
         // enable unlimited mouse-movement (user needs to click on canvas first)
         canvas.addEventListener("mousedown", canvas.requestPointerLock);
         canvas.addEventListener("mouseup", () => document.exitPointerLock());
         canvas.addEventListener("click", handleClick);
-        // prepare music and sounds
-        let audioStart = await Episoma.ƒ.Audio.load("Sound/Start.mp3");
-        let audioPlay = await Episoma.ƒ.Audio.load("Sound/Play.mp3");
-        cmpAudioStart = new Episoma.ƒ.ComponentAudio(audioStart, true, true);
-        cmpAudioPlay = new Episoma.ƒ.ComponentAudio(audioPlay, true, false);
-        cmpAudioCrash = new Episoma.ƒ.ComponentAudio(await Episoma.ƒ.Audio.load("Sound/Crash.mp3"), false, false);
-        Episoma.game.addComponent(cmpAudioStart);
-        Episoma.game.addComponent(cmpAudioPlay);
-        Episoma.game.addComponent(cmpAudioCrash);
-        Episoma.ƒ.AudioManager.default.listenTo(Episoma.game);
         // set lights
         let cmpLight = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightDirectional(Episoma.ƒ.Color.CSS("WHITE")));
         cmpLight.pivot.lookAt(new Episoma.ƒ.Vector3(0.5, 1, 0.8));
@@ -79,9 +67,9 @@ var Episoma;
         await waitForKeyPress(Episoma.ƒ.KEYBOARD_CODE.SPACE);
         Episoma.ƒ.Debug.log("Space pressed");
         Episoma.body.explode();
-        cmpAudioPlay.play(true);
-        cmpAudioCrash.play(true);
-        cmpAudioStart.activate(false);
+        Episoma.Audio.play(Episoma.AUDIO.START, false);
+        Episoma.Audio.play(Episoma.AUDIO.PLAY);
+        Episoma.Audio.play(Episoma.AUDIO.CRASH);
         let domMenu = document.querySelector("div#Menu");
         domMenu.style.visibility = "hidden";
         window.addEventListener("keydown", hndKeyDown); // activate when user starts...
@@ -158,8 +146,9 @@ var Episoma;
             return;
         let code = (_event.shiftKey ? Episoma.ƒ.KEYBOARD_CODE.SHIFT_LEFT : "") + _event.code;
         let transformation = Episoma.Control.transformations[code];
-        if (transformation)
-            controlActive.moveTo(transformation);
+        if (!transformation)
+            return;
+        controlActive.moveTo(transformation);
         updateDisplay();
     }
     //#endregion
