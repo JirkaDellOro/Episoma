@@ -32,7 +32,7 @@ var Episoma;
         canvas.addEventListener("click", handleClick);
         // set lights
         let cmpLight = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightDirectional(Episoma.ƒ.Color.CSS("WHITE")));
-        cmpLight.pivot.lookAt(new Episoma.ƒ.Vector3(0.5, 1, 0.8));
+        cmpLight.pivot.lookAt(new Episoma.ƒ.Vector3(0.5, -1, -0.8));
         let cmpLightAmbient = new Episoma.ƒ.ComponentLight(new Episoma.ƒ.LightAmbient(new Episoma.ƒ.Color(0.25, 0.25, 0.25, 1)));
         Episoma.game.addComponent(cmpLightAmbient);
         // setup orbiting camera

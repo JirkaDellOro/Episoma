@@ -16,6 +16,7 @@ var Episoma;
             let cmpCamera = new ƒ.ComponentCamera();
             // cmpCamera.backgroundColor = new ƒ.Color(1, 1, 1, 1);
             cmpCamera.backgroundColor = ƒ.Color.CSS("WHITE");
+            cmpCamera.pivot.rotateY(180);
             rotatorX.addComponent(cmpCamera);
             this.setDistance(20);
         }

@@ -39,7 +39,7 @@ namespace Episoma {
 
     // set lights
     let cmpLight: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightDirectional(ƒ.Color.CSS("WHITE")));
-    cmpLight.pivot.lookAt(new ƒ.Vector3(0.5, 1, 0.8));
+    cmpLight.pivot.lookAt(new ƒ.Vector3(0.5, -1, -0.8));
     let cmpLightAmbient: ƒ.ComponentLight = new ƒ.ComponentLight(new ƒ.LightAmbient(new ƒ.Color(0.25, 0.25, 0.25, 1)));
     game.addComponent(cmpLightAmbient);
 
