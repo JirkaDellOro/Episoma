@@ -49,16 +49,16 @@ namespace Episoma {
       this.fragment = _fragment;
     }
 
-    public pickFragment(_viewport: ƒ.Viewport, _pos: ƒ.Vector2): boolean {
+    public pickFragment(_viewport: ƒ.Viewport, _pos: ƒ.Vector2): number {
       for (let node of this.fragment.getChildren()) {
         let projection: ƒ.Vector3 = camera.cmpCamera.project(node.mtxWorld.translation);
         let posClient: ƒ.Vector2 = _viewport.pointClipToClient(projection.toVector2());
         // beware! magic numbers here...
         if (ƒ.Vector2.DIFFERENCE(_pos, posClient).magnitude < 200 - (projection.z - 0.5) * 400)
           // ƒ.Debug.log(node.name + " | " + projection.toString());
-          return true;
+          return projection.z;
       }
-      return false;
+      return undefined;
     }
 
     public move(_transformation: Transformation): void {

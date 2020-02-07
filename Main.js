@@ -120,12 +120,16 @@ var Episoma;
         if (Episoma.ƒ.Time.game.hasTimers())
             return;
         let mouse = new Episoma.ƒ.Vector2(_event.offsetX, _event.offsetY);
+        let pickResults = [];
         for (let control of Episoma.body.controls)
-            if (control.pickFragment(viewport, mouse)) {
-                controlActive.freezeFragment();
-                controlActive = control;
-                controlActive.unfreezeFragment();
-            }
+            pickResults.push({ distance: control.pickFragment(viewport, mouse), control: control });
+        pickResults.sort((_a, _b) => _a.distance < _b.distance || !_b.distance ? -1 : 1);
+        Episoma.ƒ.Debug.log(pickResults);
+        if (pickResults[0]) {
+            controlActive.freezeFragment();
+            controlActive = pickResults[0].control;
+            controlActive.unfreezeFragment();
+        }
         controlActive.rotateToSegment(Episoma.camera.getSegmentY());
     }
     function hndPointerMove(_event) {
