@@ -39,6 +39,7 @@ var Episoma;
             return this.getComponent(ƒ.ComponentMaterial).material.getCoat().color;
         }
     }
+    // private static test: boolean = (function (): boolean { console.log(config); return true; })();
     Cube.mesh = new ƒ.MeshCube();
     Cube.materials = Cube.createMaterials();
     Episoma.Cube = Cube;

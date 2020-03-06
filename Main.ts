@@ -1,5 +1,6 @@
 namespace Episoma {
   export import ƒ = FudgeCore;
+  // ƒ.RenderManager.initialize(true, true);
 
   enum GAME_STATE {
     START, MENU, PLAY, OVER
@@ -27,7 +28,6 @@ namespace Episoma {
     document.removeEventListener("click", hndLoad);
     const canvas: HTMLCanvasElement = document.querySelector("canvas");
     args = new URLSearchParams(location.search);
-    ƒ.RenderManager.initialize(true, true);
     ƒ.Debug.log("Canvas", canvas);
 
     Audio.start();

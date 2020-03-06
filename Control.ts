@@ -118,8 +118,6 @@ namespace Episoma {
       mtxFragment.rotate(_transformation.rotation, true);
       mtxContainer.translate(_transformation.translation);
 
-      ƒ.RenderManager.update();
-
       let collisions: Collision[] = [];
       for (let cube of this.fragment.getChildren()) {
         let element: GridElement = grid.pull(cube.mtxWorld.translation);

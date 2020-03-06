@@ -13,6 +13,7 @@ namespace Episoma {
   type Materials = Map<CUBE_TYPE, ƒ.Material>;
 
   export class Cube extends ƒ.Node {
+    // private static test: boolean = (function (): boolean { console.log(config); return true; })();
     private static mesh: ƒ.MeshCube = new ƒ.MeshCube();
     private static materials: Materials = Cube.createMaterials();
 

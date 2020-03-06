@@ -89,7 +89,6 @@ var Episoma;
             let save = [mtxContainer.getMutator(), mtxFragment.getMutator()];
             mtxFragment.rotate(_transformation.rotation, true);
             mtxContainer.translate(_transformation.translation);
-            ƒ.RenderManager.update();
             let collisions = [];
             for (let cube of this.fragment.getChildren()) {
                 let element = Episoma.grid.pull(cube.mtxWorld.translation);

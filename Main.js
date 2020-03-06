@@ -2,6 +2,7 @@
 var Episoma;
 (function (Episoma) {
     Episoma.ƒ = FudgeCore;
+    // ƒ.RenderManager.initialize(true, true);
     let GAME_STATE;
     (function (GAME_STATE) {
         GAME_STATE[GAME_STATE["START"] = 0] = "START";
@@ -23,7 +24,6 @@ var Episoma;
         document.removeEventListener("click", hndLoad);
         const canvas = document.querySelector("canvas");
         Episoma.args = new URLSearchParams(location.search);
-        Episoma.ƒ.RenderManager.initialize(true, true);
         Episoma.ƒ.Debug.log("Canvas", canvas);
         Episoma.Audio.start();
         // enable unlimited mouse-movement (user needs to click on canvas first)
