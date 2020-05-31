@@ -3,6 +3,9 @@
     "commonSourceDirectory": "../Source",
     "sourceFiles": [
       "../Source/Debug/DebugTarget.ts",
+      "../Source/Debug/DebugInterfaces.ts",
+      "../Source/Debug/DebugConsole.ts",
+      "../Source/Debug/Debug.ts",
       "../Source/Event/Event.ts",
       "../Source/Transfer/Mutable.ts",
       "../Source/Transfer/Serializer.ts",
@@ -34,10 +37,9 @@
       "../Source/Component/ComponentMesh.ts",
       "../Source/Component/ComponentScript.ts",
       "../Source/Component/ComponentTransform.ts",
+      "../Source/Control/Control.ts",
       "../Source/Control/Axis.ts",
-      "../Source/Debug/DebugInterfaces.ts",
-      "../Source/Debug/DebugConsole.ts",
-      "../Source/Debug/Debug.ts",
+      "../Source/Control/Keyboard.ts",
       "../Source/Debug/DebugAlert.ts",
       "../Source/Debug/DebugDialog.ts",
       "../Source/Debug/DebugTextArea.ts",
@@ -60,7 +62,6 @@
       "../Source/Mesh/Mesh.ts",
       "../Source/Mesh/MeshCube.ts",
       "../Source/Mesh/MeshHeightMap.ts",
-      "../Source/Mesh/MeshOperations.ts",
       "../Source/Mesh/MeshPyramid.ts",
       "../Source/Mesh/MeshQuad.ts",
       "../Source/Mesh/MeshSphere.ts",
@@ -99,7 +100,7 @@
         },
         {
           "pos": 593,
-          "end": 338407,
+          "end": 373244,
           "kind": "text"
         }
       ],
@@ -130,11 +131,11 @@
       "sections": [
         {
           "pos": 0,
-          "end": 139080,
+          "end": 149852,
           "kind": "text"
         }
       ]
     }
   },
-  "version": "3.7.5"
+  "version": "3.9.0-dev.20200327"
 }
